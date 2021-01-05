@@ -1,0 +1,30 @@
+ #barchart .x.axis text {
+        text-anchor: end !important;
+        text-transform: capitalize;
+        transform: rotate(-90deg) translateX(-6px) translateY(-13px);
+    }
+
+#barchart text.x-axis-label{
+        font-size: 16px;
+    }   
+
+#barchart text.y-axis-label{
+        font-size: 16px;
+    }   
+
+ #tablechart td.dc-table-label {
+        color: white;
+        font-family: "Arial Rounded MT Bold";
+        background-color: royalblue;
+    }
+
+ #tablechart th.dc-table-head {
+        color: white;
+        font-family: "Arial Rounded MT Bold";
+        background-color: royalblue;
+    }
+
+ .reset{
+    color: red;
+    alignment: inherit;
+}

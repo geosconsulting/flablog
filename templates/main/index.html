@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <div class="container">
+    <div class="jumbotron text-center">
+        <h1 class="display-4">GeoAI Blog</h1>
+        <p class="lead">Where Geospatial Analysis and Artificial Intelligence intersect</p>
+        <a class="btn btn-info btn-lg" id="test" role="button">Learn more</a>
+    </div>
+    <div class="row">
+    <div class="col-sm-4">
+      <div class="card" style="width: 18rem;">
+        <img src="../static/images/map.jfif" alt="Image" width="340" height="220" class="card-img-top" >
+        <div class="card-body">
+            <h5 class="card-title">Geospatial Analysis</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="#" class="btn btn-primary">More..</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="card" style="width: 18rem;">
+      <img src="../static/images/geoai.jfif" alt="Image" width="340" height="220" class="card-img-top" >
+        <div class="card-body">
+        <h5 class="card-title">Data Analysis - Machine Learning</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <a href="#" class="btn btn-primary">More..</a>
+      </div>
+    </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="card" style="width: 18rem;">
+        <img src="../static/images/farming.jfif" alt="Image" width="340" height="220" class="card-img-top" >
+            <div class="card-body">
+            <h5 class="card-title">Remote Sensing - Deep Learning</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="#" class="btn btn-primary">More..</a>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+{% endblock %}

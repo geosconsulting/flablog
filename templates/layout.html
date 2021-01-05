@@ -1,0 +1,51 @@
+{% extends "bootstrap/base.html" %}
+
+<html>
+<head>
+    {% block title %}Standard{% endblock %}
+    {% block styles %}
+        {{super()}}
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/main.css')}}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/map.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename="css/dc.css") }}">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    {% endblock %}
+</head>
+{% block navbar %}
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script type="text/javascript" src=" {{ url_for('static', filename='js/libraries/d3.js') }}"></script>
+    <script type="text/javascript" src=" {{ url_for('static', filename='js/libraries/crossfilter.js') }}"></script>
+    <script type="text/javascript" src=" {{ url_for('static', filename='js/libraries/dc.js') }}"></script>
+    <script type='text/javascript' src=" {{ url_for('static', filename='js/libraries/jquery-3.5.1.js') }}"></script>
+    <script type="text/javascript" src=" {{ url_for('static', filename='js/custom/main.js') }}"></script>
+    <nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">Fabio Lana</a>
+        </div>
+        <ul class="nav navbar-nav ">
+            <li><a href="/">Home</a></li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" href="#" data-toggle="dropdown">User</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
+                        <li><a href="{{ url_for('auth.register') }}">Register</a></li>
+                        <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
+                    </ul>
+            </li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" href="#" data-toggle="dropdown">Blog</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ url_for('analytics.flood_chart') }}">Flood Risk</a></li>
+                    </ul>
+            </li>
+
+        </ul>
+
+    </div>
+    </nav>
+{% endblock %}
+{% block content %}
+{% endblock %}
+</body>
+</html>
