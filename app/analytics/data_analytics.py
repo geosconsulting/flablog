@@ -24,8 +24,6 @@ def get_flood_data():
 def flood_chart():
     return render_template('analytics/flood_chart.html')
 
-
-
 @analytics.route('/faw')
 def faw():
-    pass
+    return render_template('analytics/famews_map.html')

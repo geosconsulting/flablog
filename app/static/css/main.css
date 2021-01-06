@@ -28,3 +28,43 @@
     color: red;
     alignment: inherit;
 }
+
+.rp {
+    font-size: 15px;
+    text-align: left;
+}
+
+.r-box {
+    font-size: 42px;
+    text-align: center;
+    height: 100px;
+    color: white;
+}
+
+#people-rp{
+    padding-bottom: 100px;
+}
+
+#rp25 {
+    background: #fee5d9;
+      }
+
+#rp50 {
+    background: #fcbba1;
+      }
+
+#rp100 {
+    background: #fc9272;
+      }
+
+#rp200 {
+    background:#fb6a4a ;
+      }
+
+#rp500 {
+    background: #de2d26;
+      }
+
+#rp1000 {
+    background: #a50f15;
+      }
