@@ -8,29 +8,30 @@ d3.json("/analytics/get_flood_data", function(error,data){
             console.log(filter+"("+f.length+") = "+JSON.stringify(f).replace("[","[\n\t").replace(/}\,/g,"},\n\t").replace("]","\n]"));
         }
 
-        var facts = crossfilter(data);
+        data.forEach(function(d){
+            d.adm0_code = +d.adm0_code;
+            d.rp25 = +d.rp25;
+            d.rp50 = +d.rp50;
+            d.rp100 = +d.rp100;
+            d.rp200 = +d.rp200;
+            d.rp500 = +d.rp500;
+            d.rp1000 = +d.rp1000;
+        });
 
-        var scatterDimension = facts.dimension(function(d){ return [d.rp25,d.rp50]; });
-        //print_filter('scatterDimension');
-        var scatterGroup = scatterDimension.group();
-        //print_filter('scatterGroup');
+        var facts = crossfilter(data);
 
         //Dimension
         var countryDimension = facts.dimension(function(d){return d.adm0_name;});
         //countryDimension.filterFunction(function(d){ return d.rp25 > 250000; });
-        //print_filter('countryDimension');
 
         //Count number adm2 in each country
         var countryGroup = countryDimension.group().reduceCount();
-        //print_filter('countryGroup');
 
         //Sum pop at risk in each country for RP25
         var peopleTotalRP25 = countryDimension.group().reduceSum(function (d){ return d.rp25;});
-        //print_filter('peopleTotalRP25');
 
         //Sum pop at risk in each country for RP50
         var peopleTotalRP50 = countryDimension.group().reduceSum(function (d){ return d.rp50;});
-        //print_filter('peopleTotalRP50');
 
         countries = [];
         Object.values(peopleTotalRP25.top(Infinity)).forEach(item => {
@@ -40,7 +41,7 @@ d3.json("/analytics/get_flood_data", function(error,data){
         barChartPeople = dc.barChart("#barchart")
                     .width(1100)
                     .height(500)
-                    .margins({top:10,bottom:175,right:10,left:80})
+                    .margins({top:50,bottom:175,right:10,left:80})
                     .centerBar(false)
                     .barPadding(0.1)
                     .outerPadding(0.2)
@@ -100,6 +101,51 @@ d3.json("/analytics/get_flood_data", function(error,data){
                             .valueAccessor(function(d){return d;})
                             .group(peopleRP1000Group);
 
+        var countryDimensionTest = facts.dimension(function(d){return d.iso3;});
+        //var filtered = countryDimensionTest.filter("DJI");
+
+        console.log(countryDimensionTest.groupAll().value());
+        console.log(facts.groupAll().value());
+
+        var provinceOneCountryAllRPSum = facts.groupAll().reduce(
+            function(i,d){ i.push(d.rp25 + d.rp50 + d.rp100 + d.rp200 + d.rp500 + d.rp1000); return i; },
+            function(i){ return i;},
+            function(){ return [];}
+            ).value();
+        print_filter('provinceOneCountryAllRPSum');
+
+        var provinceAllCountriesAllRP = countryDimensionTest.group().reduce(
+            function(i,d){ i.push(d.rp25 + d.rp50 + d.rp100 + d.rp200 + d.rp500 + d.rp1000); return i; },
+            function(i){ return i;},
+            function(){ return [];}
+            );
+        //print_filter('provinceAllCountriesAllRP');
+
+        var countryGroupAllRP = facts.groupAll().reduce(
+            function(i,d){ return  d.iso3 = { 'rp_pop': [pop25 += d.rp25, pop50 += d.rp50,
+                                       pop100 += d.rp100,pop200 += d.rp200,
+                                       pop500 += d.rp500,pop1000 += d.rp1000]}},
+            function(i){ return i;},
+            function(){ return iso3 = {'rp_pop': [pop25=0, pop50=0, pop100=0, pop200=0, pop500=0, pop1000=0]}}
+            ).value();
+        print_filter(countryGroupAllRP);
+
+        // var countryGroupAllRP11 = countryDimensionTest.group().reduce(
+        //     function(i,d){ return [pop25 += d.rp25,
+        //                                pop50 += d.rp50,
+        //                                pop100 += d.rp100,
+        //                                pop200 += d.rp200,
+        //                                pop500 += d.rp500,
+        //                                pop1000 += d.rp1000]},
+        //     function(i){ return i;},
+        //     function(){ return {iso3:[pop25=0,
+        //                              pop50=0,
+        //                              pop100=0,
+        //                              pop200=0,
+        //                              pop500=0,
+        //                              pop1000=0]}}
+        //     );
+        // print_filter(countryGroupAllRP11);
 
         dc.renderAll();
     });

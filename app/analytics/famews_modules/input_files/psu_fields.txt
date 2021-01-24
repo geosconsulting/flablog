@@ -1,0 +1,4 @@
+['id', 'date_of_survey', 'lattitude', 'longitude','country','region','main_crop','crop_health',
+'crop_stage', 'date_of_rain', 'farming_system', 'fertilizer_used', 'irrigation', 'planting_date',
+'rain_amount', 'station1_faw','station2_faw','station3_faw','station4_faw',
+'station5_faw','natural_enemies']

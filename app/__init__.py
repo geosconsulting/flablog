@@ -36,7 +36,7 @@ def create_app():
     app.register_blueprint(main_blueprint)
 
     # Analytics Section
-    from .analytics import data_analytics
+    from .analytics import data_analytics_routing
     from app.analytics import analytics as data_analytics
     app.register_blueprint(data_analytics)
 

@@ -1,0 +1,3 @@
+['_id','date', 'latitude', 'longitude','country', 'region','cropMain', 'cropPlantingDate',
+'cropIrrigation', 'cropFertilizer', 'cropStage', 'rainAmount'
+, 'rainLastDate','cropHealth', 'cropSystem','scoutingPlantsChecked','scoutingPlantsFAW', 'scoutingPercentageFAW']

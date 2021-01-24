@@ -12,11 +12,13 @@
     {% endblock %}
 </head>
 {% block navbar %}
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+            integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
+            crossorigin="anonymous"></script>
     <script type="text/javascript" src=" {{ url_for('static', filename='js/libraries/d3.js') }}"></script>
     <script type="text/javascript" src=" {{ url_for('static', filename='js/libraries/crossfilter.js') }}"></script>
     <script type="text/javascript" src=" {{ url_for('static', filename='js/libraries/dc.js') }}"></script>
-    <script type='text/javascript' src=" {{ url_for('static', filename='js/libraries/jquery-3.5.1.js') }}"></script>
+    <script type="text/javascript" src=" {{ url_for('static', filename='js/libraries/colorbrewer.js') }}"></script>
     <script type="text/javascript" src=" {{ url_for('static', filename='js/custom/main.js') }}"></script>
     <nav class="navbar navbar-default">
     <div class="container-fluid">
@@ -25,6 +27,7 @@
         </div>
         <ul class="nav navbar-nav ">
             <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
             <li class="dropdown">
                 <a class="dropdown-toggle" href="#" data-toggle="dropdown">User</a>
                     <ul class="dropdown-menu">
@@ -34,18 +37,34 @@
                     </ul>
             </li>
             <li class="dropdown">
-                <a class="dropdown-toggle" href="#" data-toggle="dropdown">Blog</a>
+                <a class="dropdown-toggle" href="#" data-toggle="dropdown">Real Time</a>
                     <ul class="dropdown-menu">
                         <li><a href="{{ url_for('analytics.flood_chart') }}">Flood Risk</a></li>
-                        <li><a href="{{ url_for('analytics.faw') }}">FAW Risk</a></li>
-                    </ul>
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1" class="dropdown-submenu-toggle">Fall Armyworm</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{{ url_for('analytics.faw_situation')}}">Global</a></li>
+			                        <li><a class="dropdown-item" href="{{ url_for('analytics.famews_chart',country='BJ')}}">Benin</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('analytics.famews_chart',country='CV')}}">Cape Verde</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('analytics.famews_chart',country='KE')}}">Kenya</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('analytics.famews_chart',country='GH')}}">Ghana</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('analytics.famews_chart',country='MW')}}">Malawi</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('analytics.famews_chart',country='MZ')}}">Mozambique</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('analytics.famews_chart',country='RW')}}">Rwanda</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('analytics.famews_chart',country='SN')}}">Senegal</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('analytics.famews_chart',country='TG')}}">Togo</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('analytics.famews_chart',country='TZ')}}">Tanzania</a></li>
+                                </ul>
+                            </li>
+                        </li>
+                    </li>
+                </ul>
             </li>
-
-        </ul>
-
+            </ul>
     </div>
     </nav>
 {% endblock %}
+<body>
 {% block content %}
 {% endblock %}
 </body>

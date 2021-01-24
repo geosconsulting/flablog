@@ -1,0 +1,7 @@
+['country','region', 'created_at', 'crop_damage', 'crop_health', 'crop_stage', 'current_damage',
+'date_of_rain', 'date_of_survey', 'dead_larvae', 'farming_system', 'fertilizer_used',
+'field_size', 'field_size_units', 'id', 'irrigation', 'lat', 'lng', 'main_crop',
+'main_crop_variety', 'natural_enemies', 'pest_stages', 'planted_data',
+'planting_date', 'prevelence', 'previous_damage', 'rain_amount',
+'scout_uid' 'station1_faw' 'station2_faw' 'station3_faw',
+'station4_faw' 'station5_faw' 'sub_farming_system' 'survey_scout_data', 'training']

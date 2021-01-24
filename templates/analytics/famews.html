@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+
+{% block title %}FAMEWS{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/famews.css') }}">
+    <div class="container">
+            <ol class = "breadcrumb">
+                <li><a href = "/">Home</a></li>
+                <li><a href = "faw_situation">Analytics</a></li>
+                <li class = "active">{{ country }}</li>
+            </ol>
+            <ul class="nav nav-tabs" id="chartTab">
+                <li class="nav-item">
+                    <a class="nav-link active" role="tab" data-toggle='tab' href="#tab1">Analysis</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" role="tab" data-toggle='tab' href="#tab2">Data</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div id="tab1" role="tabpanel" class="tab-pane active">
+                    <div class="row">
+                        <div class="col-xs-10">
+                            <h2 class="country-name">{{ country }}</h2>
+                        </div>
+                        <div class="col-xs-2">
+                            <div id="number-display">Records     </div>
+                        </div>
+            </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <h3 data-toggle = "tooltip" title = "Tooltip on left">Scouting Received<br><small>Number of Plants Daily</small></h3>
+                            <div id="linechart">
+                                <a class="reset" style="display:none" href="javascript:lineChart.filterAll();
+                                                                                  dc.redrawAll();">Reset Filters</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-9">
+                            <h3>Scouting By Crop</h3>
+                            <div id="barchart">
+                                <a class="reset" style="display:none" href="javascript:barChart.filterAll();
+                                                                                dc.redrawAll();">Reset Filters</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <h3>Infestation by Stage</h3>
+                            <div id="boxplotchart">
+                                <a class="reset" style="display:none" href="javascript:boxPlot.filterAll();
+                                                                                  dc.redrawAll();">Reset Filters</a>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <h3>Infestation by Crop</h3>
+                            <div id="piechart">
+                                <a class="reset" style="display:none" href="javascript:pieChart.filterAll();
+                                                                                  dc.redrawAll();">Reset Filters</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <h3>Number of plants versus infested plants</h3>
+                            <div id="bubbleplotchart">
+                                 <a class="reset" style="display:none" href="javascript:bubble.filterAll();
+                                                                               dc.redrawAll();">Reset Filters</a>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <h3>Number of plants versus infested plants</h3>
+                            <div id="scatterplot">
+                                 <a class="reset" style="display:none" href="javascript:scatter.filterAll();
+                                                                               dc.redrawAll();">Reset Filters</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab2" role="tabpanel" class="tab-pane">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class='dc-data-count'>
+                                <span class='filter-count'></span> selected out of <span class='total-count'></span> records.
+                                    <a href="javascript:dc.filterAll(); dc.renderAll();">Reset All</a>
+                            </div>
+                            <table id="table-records" class="table table-responsive table-hover dc-data-table "></table>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab4" role="tabpanel" class="tab-pane">
+                </div>
+                </div>
+            </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.3.0/d3.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crossfilter2/1.5.4/crossfilter.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reductio/1.0.0/reductio.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dc/4.2.0/dc.js"></script>
+    <script type="text/javascript" src=" {{ url_for('static', filename='js/custom/famews.js') }}"></script>
+{% endblock %}

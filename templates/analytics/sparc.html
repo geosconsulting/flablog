@@ -3,8 +3,16 @@
 {% block title %}Flood Risk{% endblock %}
 
 {% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sparc.css') }}">
+    <style>
+    #barchart .x.axis text {
+        font-size: 11px;
+        text-anchor: end !important;
+        transform: translateX(-10px) rotate(-45deg);
+    }
+    </style>
     <div class="container">
-        <h1>People at risk By Country</h1>
+        <h1 class="main-title">People at risk By Country</h1>
         <div class="row-fluid" id="people-rp">
             <div class="col-sm-2 r-box" id="rp25">
                 <p class="rp">RP 25 years</p>
@@ -26,12 +34,12 @@
             </div>
         </div>
         <div id="num-records"></div>
-        <div id="barchart" style="width: 100%; height: 550px;">
+        <div id="barchart">
             <a class="reset"
                href="javascript:barChartPeople.filterAll();dc.redrawAll();"
                style="display: none;">Remove Filter</a>
         </div>
         <div id="tablechart" class="table table-striped table-responsive table-hover dc-data-table" style="width: 52%;"></div>
     </div>
-    <script type="text/javascript" src=" {{ url_for('static', filename='js/custom/d3_flood_chart.js') }}"></script>
+    <script type="text/javascript" src=" {{ url_for('static', filename='js/custom/sparc.js') }}"></script>
 {% endblock %}

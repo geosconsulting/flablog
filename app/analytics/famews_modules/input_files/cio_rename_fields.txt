@@ -1,0 +1,5 @@
+{'_id': 'id','date':'date_of_survey', 'created': 'created_at', 'latitude': 'lat', 'longitude': 'lng',
+'cropMain': 'main_crop', 'cropVariety':'main_crop_variety', 'cropPlantingDate':'planting_date',
+'cropIrrigation':'irrigation','cropFertilizer':'fertilizer', 'cropStage': 'crop_stage','cropHealth':'crop_health',
+'cropSystem':'farming_system'
+}

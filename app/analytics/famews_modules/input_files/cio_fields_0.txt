@@ -1,0 +1,4 @@
+['_id','date', 'latitude', 'longitude', 'country', 'region','cropMain', 'cropPlantingDate', 'cropIrrigation',
+'cropFertilizer', 'cropStage', 'cropFieldSize', 'cropFieldSizeUnit','rainAmount', 'rainLastDate','cropHealth',
+'cropSystem', 'sample1PlantsChecked','sample1FAW', 'sample2PlantsChecked','sample2FAW','sample3PlantsChecked',
+'sample3FAW', 'sample4PlantsChecked','sample4FAW', 'sample5PlantsChecked','sample5FAW']

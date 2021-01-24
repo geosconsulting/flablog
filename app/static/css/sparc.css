@@ -1,0 +1,41 @@
+.main-title {
+    font-size: xxx-large;
+    font-family: "Arial Black";
+    text-align: center;
+    padding-bottom: 20px;
+    color: black;
+}
+
+.rp {
+    font-size: 15px;
+    text-align: left;
+}
+
+.r-box {
+    font-size: 42px;
+    text-align: center;
+    height: 100px;
+    color: white;
+}
+
+#people-rp{
+    padding-bottom: 100px;
+    font-family: "Arial Black";
+    background-color: #1f77b4;
+}
+
+.country-values{
+    margin-top: 25px;
+    font-size: medium;
+}
+
+#values{
+    /*display: inline-block;*/
+    text-align: left;
+    margin-left: 40px;
+}
+
+.reset{
+    color: red;
+    alignment: inherit;
+}
