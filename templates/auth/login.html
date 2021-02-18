@@ -8,12 +8,16 @@
         <div class="col-md-4 col-md-offset-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <strong class="">Login</strong>
+                    <strong>Login</strong>
                 </div>
-                <div class="panel-body">
-                    {{ wtf.quick_form(form) }}
-                </div>
-                <div class="panel-footer">Not Registered? <a href="{{ url_for('auth.register') }}">Register here</a></div>
+                <form method="post">
+                    <div class="panel-body">
+                         <div class="form-group">
+                            {{ wtf.quick_form(form) }}
+                         </div>
+                    </div>
+                </form>
+                <div class="panel-footer">Not Registered? <a href="{{ url_for('auth_dir.register') }}">Register here</a></div>
             </div>
 
         </div>

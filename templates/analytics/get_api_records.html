@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block title %} {{ title }}{% endblock %}
+
+{% block content %}
+    <div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong>Get Records From Penn and FAO API</strong>
+                </div>
+                <form method="post">
+                    <div class="panel-body">
+                         <div class="form-group">
+                            {{ wtf.quick_form(form) }}
+                         </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+                {% if category == 'message' %}
+                    <div class="alert alert-warning" role="alert">
+                {% else %}
+                    <div class="alert alert-{{ category }}" role="alert">
+                {% endif %}
+                {{ message }}</div>
+                    </div>
+            {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+    </div>
+{% endblock %}

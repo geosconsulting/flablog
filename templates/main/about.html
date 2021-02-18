@@ -1,9 +1,39 @@
 {% extends "layout.html" %}
 
-{% block title %}About{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block content %}
     <div class="container">
-        <h1>About</h1>
+        <div class="row">
+        <div class="side">
+            <img class="img-thumbnail center-block" src="{{ url_for('static', filename='images/fabio.lana.jpg') }}" title="Fabio" alt="Fabio Lana">
+            <div class="text-center">
+                <p class="fas fa-map-marker-alt" style="font-size: 32px"></p>
+                <h2>I live in Rome, Italy</h2>
+                <br/>
+            </div>
+            <div class="text-center">
+                <p class="fas fa-at" style="font-size: 32px"></p>
+                <h2>fabiolana@fabiolana.it</h2>
+
+            </div>
+        </div>
+        <div class="main">
+            <h2 class="main-title">About Me</h2>
+            <p class="text-justify">
+                Academic training in urban planning and data analysis to achieve insight on complex territorial systems with a
+                thorough understanding of the dynamics that govern the interaction between natural and built environment.
+                <br>
+                Risk, vulnerability and resilience assessment and management of natural hazards using GIS and Remote Sensing in
+                particular in the field of flood modeling and wildfires analysis.
+                <br>
+                Vast experience in the design of databases with a spatial component and more than ten years experience in
+                Geographical Information Systems, Remote Sensing and geospatial analysis.
+                Experience consulting with, advising, supporting and presenting geomatics related information to clients and
+                writing proposals, reports, research papers.
+                </p>
+                <br>
+        </div>
+    </div>
     </div>
 {% endblock %}

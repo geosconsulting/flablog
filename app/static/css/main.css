@@ -4,38 +4,6 @@ div {
     box-sizing: border-box;
 }
 
-#barchart .x.axis text {
-    text-anchor: end !important;
-    text-transform: capitalize;
-    /*transform: rotate(-90deg) translateX(-6px) translateY(-13px);*/
-    /*transform: translateX(-6px) translateY(-25px);*/
-}
-
-#barchart text.x-axis-label{
-        font-size: 16px;
-    }   
-
-#barchart text.y-axis-label{
-        font-size: 16px;
-    }   
-
- #tablechart td.dc-table-label {
-        color: white;
-        font-family: "Arial Rounded MT Bold";
-        background-color: #1f77b4;
-    }
-
- #tablechart th.dc-table-head {
-        color: white;
-        font-family: "Arial Rounded MT Bold";
-        background-color: #1f77b4;
-    }
-
- .navbar-brand{
-     font-family: "Arial Black";
- }
-
-
 .dropdown-submenu {
   position: relative;
   z-index:2;
@@ -85,5 +53,83 @@ div {
   border-radius: 6px 0 6px 6px;
 }
 
+.main-title {
+    font-size:52px;
+    font-family: Elephant;
+    /*font-family: "Lora", Georgia, "Times New Roman", Times, serif;*/
+    text-align: center;
+    color: black;
+}
+
+.sub-title {
+    font-size:34px;
+    font-family: Corbel;
+    text-align: center;
+    padding-bottom: 10px;
+    color: gray;
+}
+
+.alert-error {
+  text-align: center;
+  color: lightsalmon;
+}
+
+.alert-info {
+  text-align: center;
+  color: lightslategray;
+}
+
+.card-title{
+    font-size: 16px;
+}
+
+/* Footer */
+.footer {
+  padding: 20px;
+  text-align: center;
+  background: #ddd;
+}
+
+.navbar-default {
+    background-color: #f8f8f8;
+    border-color: #e7e7e7;
+    font-size: large;
+    padding: 19px 20px !important;
+}
+
+.navbar-brand{
+    font-size: 24px;
+    /*line-height: 80px;*/
+    /*margin-top: -18px;*/
+}
+
+.navbar-default a:hover {
+  border-bottom: 5px solid #1f77b4;
+}
+
+        /* Column container */
+        .row {
+          display: -ms-flexbox; /* IE10 */
+          display: flex;
+          -ms-flex-wrap: wrap; /* IE10 */
+          flex-wrap: wrap;
+        }
+
+        /* Create two unequal columns that sits next to each other */
+        /* Sidebar/left column */
+        .side {
+          -ms-flex: 30%; /* IE10 */
+          flex: 30%;
+          background-color: #f1f1f1;
+          padding: 20px;
+        }
+
+        /* Main column */
+        .main {
+          -ms-flex: 70%; /* IE10 */
+          flex: 70%;
+          background-color: white;
+          padding: 20px;
+        }
 
 

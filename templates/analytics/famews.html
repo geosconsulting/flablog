@@ -5,11 +5,16 @@
 {% block content %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/famews.css') }}">
     <div class="container">
-            <ol class = "breadcrumb">
-                <li><a href = "/">Home</a></li>
-                <li><a href = "faw_situation">Analytics</a></li>
-                <li class = "active">{{ country }}</li>
-            </ol>
+{#            <ol class = "breadcrumb">#}
+{#                <li><a href = "/">Home</a></li>#}
+{#                <li><a href = "faw_situation">Fall Armyworm Home</a></li>#}
+{#                <li class = "active">{{ country }}</li>#}
+{#            </ol>#}
+            <div class="row">
+                <div class="col-xs-12">
+                    <h2 class="main-title lead">{{ country }}</h2>
+                </div>
+            </div>
             <ul class="nav nav-tabs" id="chartTab">
                 <li class="nav-item">
                     <a class="nav-link active" role="tab" data-toggle='tab' href="#tab1">Analysis</a>
@@ -20,17 +25,24 @@
             </ul>
             <div class="tab-content">
                 <div id="tab1" role="tabpanel" class="tab-pane active">
-                    <div class="row">
-                        <div class="col-xs-10">
-                            <h2 class="country-name">{{ country }}</h2>
+                    <div  class="row-fluid" id="people-rp">
+                        <div class="col-xs-2 scouting-box" id="num-scouting">
+                            <p class="label-scouting-box">Records<br></p>
                         </div>
-                        <div class="col-xs-2">
-                            <div id="number-display">Records     </div>
+                        <div class="col-xs-2 scouting-box" id="average-infestation">
+                            <p class="label-scouting-box">Average Level</p>
                         </div>
-            </div>
+                        <div class="col-sm-2 scouting-box" id="max-infestation">
+                            <p class="label-scouting-box">Max. Level</p>
+                        </div>
+                        <div class="col-sm-6 scouting-box" id="worst-province">
+                            <p class="label-scouting-box">Worst Affected Area</p>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-12">
-                            <h3 data-toggle = "tooltip" title = "Tooltip on left">Scouting Received<br><small>Number of Plants Daily</small></h3>
+                            <h3 data-toggle = "tooltip" title = "Number of Records Received since 2019">Scouting Received
+                                <br><small id="long-exp-charts">Number of Plants Daily</small></h3>
                             <div id="linechart">
                                 <a class="reset" style="display:none" href="javascript:lineChart.filterAll();
                                                                                   dc.redrawAll();">Reset Filters</a>
@@ -65,14 +77,14 @@
                     <div class="row">
                         <div class="col-xs-6">
                             <h3>Number of plants versus infested plants</h3>
-                            <div id="bubbleplotchart">
+                            <div id="bubble-chart">
                                  <a class="reset" style="display:none" href="javascript:bubble.filterAll();
                                                                                dc.redrawAll();">Reset Filters</a>
                             </div>
                         </div>
                         <div class="col-xs-6">
                             <h3>Number of plants versus infested plants</h3>
-                            <div id="scatterplot">
+                            <div id="scatter-plot">
                                  <a class="reset" style="display:none" href="javascript:scatter.filterAll();
                                                                                dc.redrawAll();">Reset Filters</a>
                             </div>

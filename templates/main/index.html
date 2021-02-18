@@ -3,10 +3,12 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
+
     <div class="container">
+
     <div class="jumbotron text-center">
-        <h1 class="display-4">GeoAI Blog</h1>
-        <p class="lead">Geospatial Analysis and Artificial Intelligence</p>
+        <h1 class="post-title">Spatially Speaking</h1>
+        <p class="lead">Space-based Information and GeoAI for Disaster Risk Management</p>
         <a class="btn btn-info btn-lg" id="test" role="button">Learn more</a>
     </div>
     <div class="row">
@@ -16,7 +18,7 @@
         <div class="card-body">
             <h5 class="card-title">Geospatial Analysis</h5>
             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">More..</a>
+            <a href="{{ url_for('main_dir.geospatial') }}" class="btn btn-primary">More..</a>
         </div>
       </div>
     </div>
@@ -24,9 +26,9 @@
       <div class="card" style="width: 18rem;">
       <img src="../static/images/geoai.jfif" alt="Image" width="340" height="220" class="card-img-top" >
         <div class="card-body">
-        <h5 class="card-title">Data Analysis - Machine Learning</h5>
+        <h5 class="card-title">Data Analysis</h5>
         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        <a href="#" class="btn btn-primary">More..</a>
+        <a href="{{ url_for('main_dir.dataanalysis') }}" class="btn btn-primary">More..</a>
       </div>
     </div>
     </div>
@@ -34,12 +36,19 @@
         <div class="card" style="width: 18rem;">
         <img src="../static/images/farming.jfif" alt="Image" width="340" height="220" class="card-img-top" >
             <div class="card-body">
-            <h5 class="card-title">Remote Sensing - Deep Learning</h5>
+            <h5 class="card-title">Remote Sensing</h5>
             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">More..</a>
+            <a href="{{ url_for('main_dir.remotesensing') }}" class="btn btn-primary">More..</a>
             </div>
         </div>
     </div>
     </div>
-    </div>
+
+{#    {% block footer_page %}#}
+{#        <div class="footer">#}
+{#            <h2>Pagina Iniziale</h2>#}
+{#        </div>#}
+{#    </div>#}
+{#    {% endblock %}#}
+
 {% endblock %}

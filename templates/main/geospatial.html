@@ -1,0 +1,95 @@
+{% extends "layout.html" %}
+
+{% block title %}About{% endblock %}
+
+{% block content %}
+    <header class="masthead" style="background-image: url({{ url_for('static', filename='images/El_Salvador.jpg') }})">
+    <div class="overlay"></div>
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="post-heading">
+            <h1>The application of GIS is limited only by the imagination of those who use it</h1>
+            <h2 class="subheading">Jack Dangermond, Esri</h2>
+            <span class="meta">El Salvador Central America
+              <a href="#">Sentinel 2 False Color</a>
+              on August 24, 2019</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+     <div class="row">
+      <div class="col-lg-12 col-md-10 mx-auto">
+        <div class="post-preview">
+          <a href="{{ url_for('blog_dir.grrasp') }}">
+            <h2 class="post-title">
+             GRRASP: Geospatial Risk and Resilience Assessment Platform for Pan European Critical Infrastructure Protection
+            </h2>
+            <h3 class="post-subtitle">
+              The Geospatial Risk and Resilience Assessment Platform uses geo-spatial technologies for the analysis
+              of the data and the visualization of the output obtained from spatial analysis. The system can be
+              deployed in various servers in different EU Member States each one performing different tasks or
+              accommodate different data.
+            </h3>
+          </a>
+          <p class="post-meta">Posted by
+            <a href="#">Start Bootstrap</a>
+            on September 24, 2019</p>
+        </div>
+        <hr>
+        <div class="post-preview">
+          <a href="{{ url_for('blog_dir.sparc') }}"">
+            <h2 class="post-title">
+              SPARC: mixing historical data and spatial analysis to assess people at risk of flooding
+            </h2>
+              <h3 class="post-subtitle">
+                  The WFP Emergency Preparedness Branch (OSEP) developed a Spatial Risk Calendar (SPARC) to support
+                  emergency preparedness and programme planning. To support emergency preparedness and early warning
+                  SPARC combines data layers covering hazard exposure and population vulnerability to determine
+                  baseline probabilistic levels of humanitarian impact associated with particular hazard types,
+                  on a monthly basis, at a sub-national level, around the globe.
+              </h3>
+          </a>
+          <p class="post-meta">Posted by
+            <a href="#">Start Bootstrap</a>
+            on September 18, 2019</p>
+        </div>
+        <hr>
+        <div class="post-preview">
+          <a href="post.html">
+            <h2 class="post-title">
+              Science has not yet mastered prophecy
+            </h2>
+            <h3 class="post-subtitle">
+              We predict too much for the next year and yet far too little for the next ten.
+            </h3>
+          </a>
+          <p class="post-meta">Posted by
+            <a href="#">Start Bootstrap</a>
+            on August 24, 2019</p>
+        </div>
+        <hr>
+        <div class="post-preview">
+          <a href="post.html">
+            <h2 class="post-title">
+              Failure is not an option
+            </h2>
+            <h3 class="post-subtitle">
+              Many say exploration is part of our destiny, but it’s actually our duty to future generations.
+            </h3>
+          </a>
+          <p class="post-meta">Posted by
+            <a href="#">Start Bootstrap</a>
+            on July 8, 2019</p>
+        </div>
+        <hr>
+        <!-- Pager -->
+        <div class="clearfix">
+          <a class="btn btn-primary float-right" href="#">Older Posts &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

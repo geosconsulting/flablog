@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/famews.css') }}">
+
+<style type="text/css">
+    .mapWrapper {
+        position: relative;
+        width: 50%;
+    }
+
+    .mapLegend {
+    position: absolute;
+    z-index: 1;
+    top: 25px;
+    left: 5px;
+    padding: 10px;
+    {#border: 1px solid #ccc;#}
+    background-color: rgba(98%,98%,98%,0.9);
+}
+</style>
+<div class="container">
+    <h1 class="main-title">FAMEWS</h1>
+    <h2 class="sub-title">Fall Armyworm Monitoring and Early Warning System - FAO</h2>
+    <div class="row">
+            <div class="mapWrapper col-sm-6">
+                <svg id="mapEl"></svg>
+            </div>
+            <div class="col-sm-6">
+                How do you predict the future? This question sits at the heart of
+                predictive analytics. In modern agriculture, advanced algorithms are
+                being used to decode the patterns and behavior of mother nature.
+                Forecasting the invasion of pests, spotting the spread of microscopic
+                disease—even helping farmers adapt to climate change. With the
+                progression of predictive algorithms, analytics, and other emerging
+                technologies, modern agriculture is pursuing ways to, in a sense,
+                predict the future and see the invisible. <br />
+                <br />
+                The Fall Armyworm (FAW), or <i>Spodoptera frugiperda</i>, is an insect
+                that is native to tropical and subtropical regions of the Americas. In
+                the absence of natural control or good management, it can cause
+                significant damage to crops. It prefers maize, but can feed on more than
+                 80 additional species of crops, including rice, sorghum, millet,
+                sugarcane, vegetable crops and cotton. FAW was first detected in Central
+                 and Western Africa in early 2016 and has quickly spread across
+                virtually all of Sub-Saharan Africa. In July 2018 it was confirmed in
+                India and Yemen. Because of trade and the moth's strong flying ability,
+                it has the potential to spread further. Farmers will need great support
+                through Integrated Pest Management to sustainability manage FAW in their
+                cropping systems.<br />
+                <br />
+            </div>
+            <div class="col-sm-12">
+                The FAMEWS Global Platform is an online resource for mapping data
+                collected by the FAMEWS mobile app whenever fields are scouted or
+                pheromone traps are checked for FAW. The platform provides a real-time
+                situation overview with maps and analytics of FAW infestations at
+                global, country and sub-country levels. The data and maps provide
+                valuable insights on how FAW populations change over time with ecology
+                in order to better understand its behaviour and guide best management
+                practices.<br />
+            </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.js"
+            integrity="sha512-TRzTPm8e1jUdGz4mhoZstgVz6TIwSYubMI+MKF18uf6zBX8gwrcO0tlH+U/YgbVUVVh15RbNSAgKlab37WFPSQ=="
+            crossorigin="anonymous"></script>
+    <script type="text/javascript" src=" {{ url_for('static', filename='js/libraries/mapmap.js') }}"></script>
+    <script type="text/javascript">
+        var map = mapmap('#mapEl')
+                .geometry('../static/data/africa_min_topo.json',{
+                    key:'ISO3'})
+                {#.geometry(d3.geo.graticule().step([10,10]).precision(0.33)(), {setExtent: false})#}
+                {#.projection(d3.geo.conicEqualArea().rotate([0, 0]).parallels([5, 5]))#}
+                .data('../static/data/faw_infestation.csv', 'iso')
+                .meta({
+		            'average': {
+                        label: "Infestation",
+                        valueLabel: "Infestation",
+                        valueUnit: "%",
+                        domain: [0,100],
+                        numberFormat:'0,0',
+                        color: colorbrewer.YlOrRd[5]
+                    },
+                    'AREA': {
+                        label: "Area",
+                        numberFormat: '.0f',
+                        valueUnit: "km²",
+                    },
+                    'infestation-ranking-deciles': {
+                        label: "Infestation Ranking"
+                    }
+	            })
+                .choropleth('average')
+                {#.highlight()#}
+                .hoverInfo(['NAME','average','AREA','infestation-ranking-deciles'])
+	            .applyBehavior(mapmap.behavior.zoom());
+        map.legend(mapmap.legend.html())
+    </script>
+</div>
+
+{% endblock %}

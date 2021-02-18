@@ -1,0 +1,90 @@
+{% extends "layout.html" %}
+
+{% block title %}About{% endblock %}
+
+{% block content %}
+    <header class="masthead" style="background-image: url({{ url_for('static', filename='images/Rome.jpg') }})">
+    <div class="overlay"></div>
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="post-heading">
+            <h1>Remote sensing has the capacity to assist the adaptive evolution of agricultural practices</h1>
+            <h2 class="subheading"> dlsòdalasdlaldsàòlasàdlòaàd</h2>
+            <span class="meta">Posted by
+              <a href="#">Start Bootstrap</a>
+              on August 24, 2019</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+     <div class="row">
+      <div class="col-lg-12 col-md-10 mx-auto">
+        <div class="post-preview">
+          <a href="{{ url_for('blog_dir.idai') }}">
+            <h2 class="post-title">
+              Google Earth Engine to assess the impact of Cyclone Idai,
+                the deadliest tropical cyclone recorded in the South-West Indian Ocean basin
+            </h2>
+            <h3 class="post-subtitle">
+              Intense Tropical Cyclone Idai was one of the worst tropical cyclones on record to affect Africa and the
+                Southern Hemisphere.The long-lived storm caused catastrophic damage, and a humanitarian crisis in
+                Mozambique, Zimbabwe, and Malawi, leaving more than 1,300 people dead and many more missing.
+            </h3>
+          </a>
+          <p class="post-meta">Posted by
+            <a href="#">Start Bootstrap</a>
+            on September 24, 2019</p>
+        </div>
+        <hr>
+        <div class="post-preview">
+          <a href="{{ url_for('blog_dir.castelfusano') }}">
+            <h2 class="post-title">
+              Google Earth Engine to assess the impact of Forest fire at Castel Fusano near Rome
+            </h2>
+          </a>
+          <p class="post-meta">Posted by
+            <a href="#">Start Bootstrap</a>
+            on September 18, 2019</p>
+        </div>
+        <hr>
+        <div class="post-preview">
+          <a href="post.html">
+            <h2 class="post-title">
+              Science has not yet mastered prophecy
+            </h2>
+            <h3 class="post-subtitle">
+              We predict too much for the next year and yet far too little for the next ten.
+            </h3>
+          </a>
+          <p class="post-meta">Posted by
+            <a href="#">Start Bootstrap</a>
+            on August 24, 2019</p>
+        </div>
+        <hr>
+        <div class="post-preview">
+          <a href="post.html">
+            <h2 class="post-title">
+              Failure is not an option
+            </h2>
+            <h3 class="post-subtitle">
+              Many say exploration is part of our destiny, but it’s actually our duty to future generations.
+            </h3>
+          </a>
+          <p class="post-meta">Posted by
+            <a href="#">Start Bootstrap</a>
+            on July 8, 2019</p>
+        </div>
+        <hr>
+        <!-- Pager -->
+        <div class="clearfix">
+          <a class="btn btn-primary float-right" href="#">Older Posts &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    </div>
+
+{% endblock %}

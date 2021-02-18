@@ -1,5 +1,13 @@
 {% extends "layout.html" %}
 
+{% block title %}Not Found on This WebSite{% endblock %}
+
 {% block content %}
-    <h1>Error 404</h1>
+    <div class="container ">
+        <h1 class="main-title">I find your lack of navigation disturbing....</h1>
+        <h2 class="sub-title">Error 404</h2>
+        <div class="row">
+            <img class="img-circle center-block" src="{{ url_for('static', filename='images/dartie.jpg') }}">
+        </div>
+    </div>
 {% endblock %}

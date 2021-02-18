@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block title %}Add Post{% endblock %}
+
+{% block content %}
+
+    <h1 class="main-title">Add Post to Blog</h1>
+    <div class="container">
+        {{ ckeditor.load() }}
+        <form method="post">
+            {{ ckeditor.create() }}
+            <input type="submit">
+        </form>
+    </div>
+
+{% endblock %}

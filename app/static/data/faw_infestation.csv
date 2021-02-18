@@ -1,0 +1,52 @@
+﻿code,iso,country,infestation-ranking,infestation-ranking-deciles,region,sub-region,average
+1,ZMB,Zambia,<25%,21-30%,Africa,Sub-Saharan Africa,25
+2,MDG,Madagascar,26-50%,31-40%,Africa,Sub-Saharan Africa,38
+3,MWI,Malawi,26-50%,21-30%,Africa,Sub-Saharan Africa,26
+4,KEN,Kenya,26-50%,31-40%,Africa,Sub-Saharan Africa,34
+5,ETH,Ethiopia,<25%,11-20%,Africa,Sub-Saharan Africa,10
+6,GHA,Ghana,<25%,11-20%,Africa,Sub-Saharan Africa,16
+7,SSD,South Sudan,26-50%,31-40%,Africa,Sub-Saharan Africa,34
+8,TZA,United Republic of Tanzania,26-50%,21-30%,Africa,Sub-Saharan Africa,30
+9,MOZ,Mozambique,26-50%,41-50%,Africa,Sub-Saharan Africa,48
+10,RWA,Rwanda,<25%,<10%,Africa,Sub-Saharan Africa,8
+11,SDN,Sudan,26-50%,31-40%,Africa,Northern Africa,35
+12,YEM,Yemen,26-50%,21-30%,Asia,Western Asia,28
+13,TGO,Togo,26-50%,31-40%,Africa,Sub-Saharan Africa,36
+14,MLI,Mali,<25%,21-30%,Africa,Sub-Saharan Africa,24
+15,BDI,Burundi,<25%,21-30%,Africa,Sub-Saharan Africa,24
+16,ZAF,South Africa,26-50%,41-50%,Africa,Sub-Saharan Africa,42
+17,BFA,Burkina Faso,<25%,<10%,Africa,Sub-Saharan Africa,8
+18,NGA,Nigeria,26-50%,41-50%,Africa,Sub-Saharan Africa,41
+19,UGA,Uganda,26-50%,31-40%,Africa,Sub-Saharan Africa,36
+20,SLE,Sierra Leone,26-50%,31-40%,Africa,Sub-Saharan Africa,40
+21,CPV,Cape Verde,26-50%,21-30%,Africa,Sub-Saharan Africa,28
+22,SOM,Somalia,51-75%,71-80%,Africa,Sub-Saharan Africa,74
+23,COD,Democratic Republic of the Congo,No Data,0%,Africa,Sub-Saharan Africa,0
+24,LBR,Liberia,<25%,11-20%,Africa,Sub-Saharan Africa,16
+25,THA,Thailand,<25%,<10%,Asia,South-eastern Asia,10
+26,SWZ,Eswatini,26-50%,31-40%,Africa,Sub-Saharan Africa,33
+27,IND,India,26-50%,21-30%,Asia,Southern Asia,26
+28,SEN,Senegal,<25%,11-20%,Africa,Sub-Saharan Africa,15
+29,EGY,Egypt,<25%,21-30%,Africa,Northern Africa,21
+30,CIV,Côte d'Ivoire,<25%,11-20%,Africa,Sub-Saharan Africa,11
+31,IRN,Iran (Islamic Republic of),<25%,<10%,Asia,Southern Asia,0
+32,ZWE,Zimbabwe,26-50%,21-30%,Africa,Sub-Saharan Africa,25
+33,BEN,Benin,26-50%,31-40%,Africa,Sub-Saharan Africa,32
+34,GIN,Guinea,<25%,21-30%,Africa,Sub-Saharan Africa,25
+35,GNB,Guinea-Bissau,26-50%,21-30%,Africa,Sub-Saharan Africa,29
+36,TLS,East Timor,<25%,21-30%,Asia,South-eastern Asia,22
+37,MMR,Myanmar,<25%,21-30%,Asia,South-eastern Asia,24
+38,LKA,Sri Lanka,No Data,0%,Asia,Southern Asia,0
+39,IDN,Indonesia,26-50%,31-40%,Asia,South-eastern Asia,38
+40,ITA,Italy,<25%,11-20%,Europe,Southern Europe,15
+41,CAF,Central African Republic,51-75%,61-70%,Africa,Sub-Saharan Africa,70
+42,PAK,Pakistan,<25%,<10%,Asia,Southern Asia,4
+43,BGD,Bangladesh,<25%,11-20%,Asia,Southern Asia,19
+44,NPL,Nepal,51-75%,61-70%,Asia,Southern Asia,66
+45,USA,United States of America,<25%,11-20%,Americas,Northern America,18
+46,MEX,Mexico,26-50%,41-50%,Americas,Latin America and the Caribbean,44
+47,CMR,Cameroon,26-50%,21-30%,Africa,Sub-Saharan Africa,26
+48,BWA,Botswana,26-50%,41-50%,Africa,Sub-Saharan Africa,41
+49,BRA,Brazil,>75%,>90%,Americas,Latin America and the Caribbean,100
+50,ARE,United Arab Emirates,26-50%,31-40%,Asia,Western Asia,31
+51,SAU,Saudi Arabia,26-50%,21-30%,Asia,Western Asia,27

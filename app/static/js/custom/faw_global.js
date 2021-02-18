@@ -3,7 +3,7 @@ var Stadia_AlidadeSmooth = L.tileLayer('https://tiles.stadiamaps.com/tiles/alida
 	attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
 });
 
-var myGeoJSONPath = '../../static/data/africa-asia.geo.json';
+var myGeoJSONPath = '../../static/data/africa-asia.geojson';
 
 var myCustomStyle = {
         stroke: false,

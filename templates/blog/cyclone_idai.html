@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+
+{% block title %}Cyclone Idai{% endblock %}
+
+{% block content %}
+    <h1 class="main-title">Cyclone Idai</h1>
+        <div class="container">
+        <h2>Study Area</h2>
+        <div class="row">
+            <div class="col-sm-4">
+                <div id="map" style="height: 250px"></div>
+            </div>
+            <div class="col-sm-8">
+                <p class="text-justify">
+                Exceptional rainfall connected with cyclone Idai caused heavy flooding in the Beira region and entire villages
+                    and towns have been completely flooded in the wake of last Thursday's high-end Category 2 storm.
+                As many as "300 to 400" bodies line the banks of a road out of the city of Beira in Mozambique, according
+                    to an eyewitness account, and flood waters have formed an inland ocean that is visible from outer space.
+                The theory tells us that the backscatter intensity received by a radar satellite drops over flooded soil
+                    because the emitted electromagnetic waves are specularly reflected off the water surface and thus does
+                    not return to the antenna. In forest areas the opposite happens because reflections from the water surface
+                    will hit the trunks and canopy and thus enhance backscatter.
+                I used a simple demonstration script provided by the Google Earth Engine team to see if flooded areas can
+                    be mapped using Sentinel-1 data. The algorithm takes two Sentinel-1 images that were pre-processed to
+                    backscatter coefficient in decibels after thermal noise removal, radiometric calibration and terrain
+                    correction.
+                </p>
+            </div>
+        </div>
+        <h2>Analysis</h2>
+            <img src="{{ url_for('static', filename='images/blog/idai-1.png') }}" />
+            <img src="{{ url_for('static', filename='images/blog/idai-2.png') }}" />
+            <img src="{{ url_for('static', filename='images/blog/idai-3.png') }}" />
+        </div>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css"
+           integrity="sha512-1xoFisiGdy9nvho8EgXuXvnpR5GAMSjFwp40gSRE3NwdUdIMIKuPa7bqoUhLD0O/5tPNhteAsE5XyyMi5reQVA=="
+           crossorigin="anonymous" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"
+             integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+             crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-providers/1.11.0/leaflet-providers.min.js"
+            integrity="sha512-TO+Wd5hbpDsACTmvzSqAZL83jMQCXGRFNoS4WZxcxrlJBTdgMYaT7g5uX49C5+Kbuxzlg2A+TFJ6UqdsXuOKLw=="
+            crossorigin="anonymous"></script>
+
+ <script type="text/javascript">
+
+    var map = L.map('map').setView({{ coords }}, {{ zoom }});
+    var Stadia_OSMBright = L.tileLayer('https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png', {
+	    maxZoom: 20,
+	    attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+    });
+
+    // Now add the layer onto the map
+    map.addLayer(Stadia_OSMBright);
+
+    // It even opens up a popup when you click it!
+    marker = L.marker({{ coords }});
+    marker.addTo(map)
+    marker.bindPopup("<strong>Cyclone Idai</strong>");
+ </script>
+
+{% endblock %}

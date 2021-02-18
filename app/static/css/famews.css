@@ -57,25 +57,25 @@ div.dc-data-count {
       height:25%;
     }
 
-#number-display{
+.label-scouting-box {
+    font-size: 15px;
+    text-align: left;
+    font-family: "Arial";
+}
+
+.scouting-box {
+    font-size: 42px;
+    text-align: center;
     height: 100px;
-    width: 200px;
-    background-color: #1f77b4;
     color: white;
-    font-size: xx-large;
-    text-align: center;
-    vertical-align: middle;
-    padding-top: 5px;
+    border: 5px solid white;
+    font-weight: bold;
+    font-family: Arial;
 }
 
-.number-display{
-    font-family: "Arial Black";
-}
-
-.country-name {
-    font-size: xxx-large;
-    font-family: "Arial Black";
-    text-align: center;
+#people-rp{
+    padding-bottom: 100px;
+    background-color: #1f77b4;
 }
 
 #barchart{
@@ -86,15 +86,23 @@ div.dc-data-count {
     margin-left: 10px;
 }
 
+#barchart text.y-axis-label{
+    font-size: 16px;
+}
+
+svg .x.axis text{
+    font-size: 16px;
+}
+
 #linechart{
     width: 100%;
 }
 
 .dc-chart select {
-      width: 200px;
+    width: 200px;
   }
 
-#scatterplot{
+#scatter-plot{
     width: 100%;
 }
 
@@ -106,7 +114,11 @@ div.container h3 small{
     color: #cccccc;
 }
 
- .reset{
+.reset{
     color: red;
     alignment: inherit;
+}
+
+#long-exp-charts{
+    color: #1f77b4;
 }

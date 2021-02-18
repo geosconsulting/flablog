@@ -1,6 +1,7 @@
 var records = [];
 var listCountries = [];
 var listCrops = [];
+var listSystems = []
 
 var scouting;
 var all;
@@ -42,7 +43,7 @@ function onlyUnique(value, index, self) {
         return self.indexOf(value) === index;
     };
 
-d3.json('/analytics/get_famews_data/'+cntry).then(function(data){
+d3.json('/analytics_dir/get_famews_data/'+cntry).then(function(data){
 
     function print_filter(filter) {
     var f=eval(filter);
@@ -60,6 +61,7 @@ d3.json('/analytics/get_famews_data/'+cntry).then(function(data){
             return false;
         }else{
             listCrops.push(row.main_crop);
+            listSystems.push(row.farming_system);
             records.push({
                 id: row.id, date: row.date_of_survey, country: row.country,region: row.region, 'Crop': row.main_crop,
                 'Stage': row.crop_stage, 'System': row.farming_system, 'Irrigation': row.irrigation,
@@ -79,8 +81,11 @@ d3.json('/analytics/get_famews_data/'+cntry).then(function(data){
     scouting = crossfilter(records);
     all = scouting.groupAll();
 
+    uniqueCrops = listCrops.filter(onlyUnique);
+
     //CROP related
     cropDimension = scouting.dimension(function (d) { return d.Crop; })
+
     groupScoutingByCrops = cropDimension.group().reduceCount(function (d) {
         return d.scoutingPlantsChecked;
     });
@@ -93,17 +98,23 @@ d3.json('/analytics/get_famews_data/'+cntry).then(function(data){
     stageDimension = scouting.dimension(function (d) {return d.Stage;});
     groupStageInfestation = stageDimension.group().reduceSum(function (d) {return d.Prevalence});
 
-    uniqueCrops = listCrops.filter(onlyUnique);
+    //Farming System Related
+    systemDimension = scouting.dimension(function (d) {return d.System;});
+    groupInfestationBySystem = systemDimension.group().reduceSum(function (d) {return d.Prevalence});
+    // print_filter('groupInfestationBySystem');
+
+    uniqueSystems = listSystems.filter(onlyUnique);
+    console.log(uniqueSystems);
 
     barChart = dc.barChart("#barchart")
         .width(1100)
         .height(250)
-        .margins({top: 10, bottom: 30, right: 20, left: 40})
-        .dimension(cropDimension)
-        .group(groupScoutingByCrops)
-        .x(d3.scaleBand().domain(uniqueCrops))
+        .margins({top: 10, bottom: 40, right: 0, left: 45})
+        .dimension(systemDimension)
+        .group(groupInfestationBySystem)
+        .x(d3.scaleBand().domain(uniqueSystems))
         .xUnits(dc.units.ordinal)
-        .xAxisLabel("Crops")
+        .xAxisLabel("Farming Systems")
         .yAxisLabel("Number of Scouting");
 
     dateDimension = scouting.dimension(function (d) {
@@ -144,7 +155,7 @@ d3.json('/analytics/get_famews_data/'+cntry).then(function(data){
     checkedInfestedDimension = scouting.dimension(function (d) {return [d.Checked, d.FAW]; });
     checkedInfestedGroup = checkedInfestedDimension.group();
 
-    scatter = dc.scatterPlot("#scatterplot")
+    scatter = dc.scatterPlot("#scatter-plot")
         .width(450)
         .height(200)
         .margins({top: 10, bottom: 30, right: 20, left: 40})
@@ -204,7 +215,7 @@ d3.json('/analytics/get_famews_data/'+cntry).then(function(data){
 
     // var ndGroup = all.reduceSum(function (d) { return d.Checked;});
     var ndGroup = all.reduceCount();
-    numberDisplay = dc.numberDisplay("#number-display")
+    numberDisplay = dc.numberDisplay("#num-scouting")
         .group(ndGroup)
         .valueAccessor(function (d) {return d;});
 
@@ -223,7 +234,7 @@ d3.json('/analytics/get_famews_data/'+cntry).then(function(data){
                 .dimension(stageDimension)
                 .group(stageArrayGroup);
 
-    bubble = dc.bubbleChart("#bubbleplotchart")
+    bubble = dc.bubbleChart("#bubble-chart")
                 .width(450)
                 .height(200)
                 .margins({top:40,bottom:60,right:80,left:60})
@@ -256,15 +267,15 @@ d3.json('/analytics/get_famews_data/'+cntry).then(function(data){
     infestedGroup = infestedDimension.group();
 
     // Equivalent to reductio().avg(function(d) { return d.bar; }), which sets the .sum() and .count() values.
-    var reducer = reductio()
-        .count(true)
-        .sum(function(d) { return d.FAW; })
-        .avg(true);
+    // var reducer = reductio()
+    //     .count(true)
+    //     .sum(function(d) { return d.FAW; })
+    //     .avg(true);
 
     // Now it should track count, sum, and avg.
-    reducer(infestedGroup);
-    print_filter(infestedGroup.top(Infinity));
-
+    // reducer(infestedGroup);
+    // print_filter(infestedGroup.top(Infinity));
+    // console.log(infestedGroup)
 
     dc.renderAll();
 });

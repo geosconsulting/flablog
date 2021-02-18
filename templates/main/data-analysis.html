@@ -1,0 +1,87 @@
+{% extends "layout.html" %}
+
+{% block title %}Data Analysis{% endblock %}
+
+{% block content %}
+    <header class="masthead" style="background-image: url({{ url_for('static', filename='images/Milan.jpg') }})">
+    <div class="overlay"></div>
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="post-heading">
+            <h1>Torture the data, and it will confess to anything.</h1>
+            <h2 class="subheading">Ronald Coase</h2>
+            <span class="meta">Milan Italy by
+              <a href="#">Sentinel 2 True Color</a>
+              on August 24, 2019</span>
+          </div>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+     <div class="row">
+      <div class="col-lg-12 col-md-10 mx-auto">
+        <div class="post-preview">
+          <a href="{{ url_for('blog_dir.famews') }}">
+            <h2 class="post-title">
+              Fall Armyworm Monitoring and Early Warning System
+            </h2>
+            <h3 class="post-subtitle">
+              Fall armyworm (FAW), Spodoptera frugiperda, is a dangerous transboundary insect with a high potential to
+                spread rapidly due to its natural distribution capacity and opportunities presented by international trade.
+            </h3>
+          </a>
+          <p class="post-meta">Posted by
+            <a href="{{ url_for('main_dir.about') }}">FLA</a>
+            on September 24, 2020</p>
+        </div>
+        <hr>
+        <div class="post-preview">
+          <a href="{{ url_for('blog_dir.giovanni') }}">
+            <h2 class="post-title">
+              Time-series Decomposition of Precipitation Data Using R
+            </h2>
+          </a>
+          <p class="post-meta">Posted by
+            <a href="#">Start Bootstrap</a>
+            on September 18, 2019</p>
+        </div>
+        <hr>
+        <div class="post-preview">
+          <a href="post.html">
+            <h2 class="post-title">
+              Science has not yet mastered prophecy
+            </h2>
+            <h3 class="post-subtitle">
+              We predict too much for the next year and yet far too little for the next ten.
+            </h3>
+          </a>
+          <p class="post-meta">Posted by
+            <a href="#">Start Bootstrap</a>
+            on August 24, 2019</p>
+        </div>
+        <hr>
+        <div class="post-preview">
+          <a href="post.html">
+            <h2 class="post-title">
+              Failure is not an option
+            </h2>
+            <h3 class="post-subtitle">
+              Many say exploration is part of our destiny, but it’s actually our duty to future generations.
+            </h3>
+          </a>
+          <p class="post-meta">Posted by
+            <a href="#">Start Bootstrap</a>
+            on July 8, 2019</p>
+        </div>
+        <hr>
+        <!-- Pager -->
+        <div class="clearfix">
+          <a class="btn btn-primary float-right" href="#">Older Posts &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    </div>
+
+{% endblock %}

@@ -1,4 +1,5 @@
-d3.json("/analytics/get_flood_data", function(error,data){
+// d3.json("/analytics_dir/get_flood_data", function(error,data){
+d3.json("/api/floods_sparc", function(error,data){
 
         function print_filter(filter) {
             var f=eval(filter);
@@ -71,41 +72,41 @@ d3.json("/analytics/get_flood_data", function(error,data){
         var peopleRP25Group = facts.groupAll().reduceSum(function(d){ return d.rp25;});
         //var peopleRP25Group = countryDimension.groupAll().reduceSum(function(d){return d.rp25;}); //.value();
 
-        var numRecords25 = dc.numberDisplay("#rp25")
+        numRecords25 = dc.numberDisplay("#rp25")
                             .valueAccessor(function(d){ return d;})
                             .group(peopleRP25Group);
 
         // var peopleRP50Group = all.reduceSum(function(d){ return d.rp50; });
-        var peopleRP50Group = facts.groupAll().reduceSum(function(d){ return d.rp50;});
-        var numRecords50 = dc.numberDisplay("#rp50")
+        peopleRP50Group = facts.groupAll().reduceSum(function(d){ return d.rp50;});
+        numRecords50 = dc.numberDisplay("#rp50")
                               .valueAccessor(function(d){return d;})
                               .group(peopleRP50Group);
 
-        var peopleRP100Group = facts.groupAll().reduceSum(function(d){ return d.rp100; });
-        var numRecords100 = dc.numberDisplay("#rp100")
+        peopleRP100Group = facts.groupAll().reduceSum(function(d){ return d.rp100; });
+        numRecords100 = dc.numberDisplay("#rp100")
                              .valueAccessor(function(d){return d;})
                              .group(peopleRP100Group);
 
-        var peopleRP200Group = facts.groupAll().reduceSum(function(d){ return d.rp200; });
-        var numRecords200 = dc.numberDisplay("#rp200")
+        peopleRP200Group = facts.groupAll().reduceSum(function(d){ return d.rp200; });
+        numRecords200 = dc.numberDisplay("#rp200")
                             .valueAccessor(function(d){return d;})
                             .group(peopleRP200Group);
 
-        var peopleRP500Group = facts.groupAll().reduceSum(function(d){ return d.rp500; });
-        var numRecords500 = dc.numberDisplay("#rp500")
+        peopleRP500Group = facts.groupAll().reduceSum(function(d){ return d.rp500; });
+        numRecords500 = dc.numberDisplay("#rp500")
                             .valueAccessor(function(d){return d;})
                             .group(peopleRP500Group);
 
-        var peopleRP1000Group = facts.groupAll().reduceSum(function(d){ return d.rp1000; });
-        var numRecords1000 = dc.numberDisplay("#rp1000")
+        peopleRP1000Group = facts.groupAll().reduceSum(function(d){ return d.rp1000; });
+        numRecords1000 = dc.numberDisplay("#rp1000")
                             .valueAccessor(function(d){return d;})
                             .group(peopleRP1000Group);
 
         var countryDimensionTest = facts.dimension(function(d){return d.iso3;});
         //var filtered = countryDimensionTest.filter("DJI");
 
-        console.log(countryDimensionTest.groupAll().value());
-        console.log(facts.groupAll().value());
+        // console.log(countryDimensionTest.groupAll().value());
+        // console.log(facts.groupAll().value());
 
         var provinceOneCountryAllRPSum = facts.groupAll().reduce(
             function(i,d){ i.push(d.rp25 + d.rp50 + d.rp100 + d.rp200 + d.rp500 + d.rp1000); return i; },

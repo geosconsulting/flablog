@@ -1,14 +1,37 @@
-.main-title {
-    font-size: xxx-large;
-    font-family: "Arial Black";
-    text-align: center;
-    padding-bottom: 20px;
-    color: black;
+#barchart .x.axis text {
+    text-anchor: end !important;
+    text-transform: capitalize;
+    /*transform: rotate(-90deg) translateX(-6px) translateY(-13px);*/
+    /*transform: translateX(-6px) translateY(-25px);*/
 }
+
+#barchart text.x-axis-label{
+    font-size: 16px;
+}
+
+#barchart rect.bar{
+    fill: #1f77b4;
+}
+
+
+#barchart text.y-axis-label{
+        font-size: 16px;
+    }
+
+#tablechart td.dc-table-label {
+        color: white;
+        background-color: #1f77b4;
+    }
+
+#tablechart th.dc-table-head {
+        color: white;
+        background-color: #1f77b4;
+    }
 
 .rp {
     font-size: 15px;
     text-align: left;
+    font-family: "Arial";
 }
 
 .r-box {
@@ -16,11 +39,13 @@
     text-align: center;
     height: 100px;
     color: white;
+    border: 5px solid white;
+    font-weight: bold;
+    font-family: Arial;
 }
 
 #people-rp{
     padding-bottom: 100px;
-    font-family: "Arial Black";
     background-color: #1f77b4;
 }
 

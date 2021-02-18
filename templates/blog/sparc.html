@@ -1,0 +1,3595 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+<h1 class="main-title">SPARC</h1>
+<h2 class="sub-title">Spatial Risk Calendar - World Food Programme</h2>
+
+The general methodology for quantitative risk is based on following
+equation:<br />
+<h3 class="text-center">RS = PT * PL * V * A</h3>
+
+    <b>P<sub>T</sub></b> is the temporal (e.g. annual) probability of occurrence
+  of a specific hazard scenario (Hs) with a given return period in an area<br />
+    <b>P<sub>L</sub></b>
+  is the locational or spatial probability of occurrence of a specific hazard
+  scenario with a given return period in an area affecting the
+  elements-at-risk<br />
+    <b>V </b>is the physical vulnerability, specified as the
+  degree of damage to a specific element-at-risk E<b><sub>s</sub></b> given the
+  local intensity caused due to the occurrence of hazard scenario Hs<br />
+    <b>A </b>is the quantification (value) of the specific type of element at risk
+  evaluated. If the value is expressed in monetary terms, the risk may also be
+  expressed as potential damage.<br />
+
+  <a
+      href="http://1.bp.blogspot.com/-RaW18RN6ZIU/Va313WJ2WeI/AAAAAAAABfM/AiiEa3UOihU/s1600/image049.png"
+      ><img
+        src="http://1.bp.blogspot.com/-RaW18RN6ZIU/Va313WJ2WeI/AAAAAAAABfM/AiiEa3UOihU/s640/image049.png"
+        width="640" /></a
+  >
+
+The overall analysis
+<span lang=""
+  >(depicted above) will aggregate data from different sources and in
+  particular:</span
+><br />
+<ul>
+  <li><span lang="">GAR15 global floodplain data (UNISDR) </span></li>
+  <li><span lang="">population data (LandScan and WorldPop) </span></li>
+  <li><span lang="">global precipitation data (FAO)</span></li>
+  <li><span lang="">administrative boundaries (GAUL)</span></li>
+  <li>
+    <span style='font: 7pt "times new roman";'></span
+    ><span lang="">analysis of historical events (EM-DAT)</span>
+  </li>
+</ul>
+The vulnerability component (V) will use:<br />
+<ul>
+  <li>
+    <span style='font: 7pt "times new roman";'>&nbsp;</span>land degradation
+    component being developed as SPARC context layers
+  </li>
+  <li>
+    <span style='font: 7pt "times new roman";'>&nbsp;</span>people vulnerability
+    based on socio-economic factors developed at VAM and in particular:
+  </li>
+</ul>
+The <b>Food Consumption Score (FCS)</b>, a tool developed by WFP, is commonly
+used as a proxy indicator for access to food. It is a weighted score based on
+dietary diversity, food frequency and the nutritional importance of food groups
+consumed.<br /><br />The <b>Coping Strategies Index (CSI)</b> is an indicator of
+household food security. The CSI is used to measure the impact of food aid
+programmes, as an early warning indicator of impending food scarcity.<br />
+<h3>Flood hazard and people at risk</h3>
+<br />A hazard is a potentially damaging physical event, which has a probability
+of occurrence within a specified return period (temporal component) and within a
+given area (spatial component) and has a given intensity.<br />
+<ul>
+  <li>
+    Spatial probability: probability of a hazard event with a certain intensity
+    happening at a particular location (flood extent as a result of hydraulic
+    modelling)
+  </li>
+  <li>
+    Temporal probability: probability that an event with a certain intensity
+    happens within a given period (return period for each flood extent map as a
+    result of hydraulic modelling)
+  </li>
+  <li>
+    Magnitude probability: probability that an event happening has a certain
+    magnitude/intensity (flood depth as a result of hydraulic modelling)
+  </li>
+</ul>
+The calculation has therefore been divided in two stages.<br />Once the spatial
+distribution of the hazard (where it could strike), characterised by its
+severity and frequency of occurrence (how often and how intense) is individuated
+it can then be used to assess the people exposed to the risk of flooding (number
+of people at risk).<br /><br />This first step calculates the “Zonal Statistics”
+for each province contained in the list of countries aided by the WFP. The flood
+prone areas characterized by an annual probability are used to compute the
+number of people likely to reside in those areas. This analysis uses the cells
+in a raster that have the same value (return period in our case), whether or not
+they are contiguous, to summarize the total number of people living within the
+boundaries of the annual probability to be affected by flooding.<br />
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr>
+      <td width="41">&nbsp;</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>
+        <a
+          href="http://2.bp.blogspot.com/-4Ji_7c68U18/Va31renY4gI/AAAAAAAABfM/LmrR8DvXZS8/s1600/image004.png"
+          ><img
+            border="0"
+            src="http://2.bp.blogspot.com/-4Ji_7c68U18/Va31renY4gI/AAAAAAAABfM/LmrR8DvXZS8/s1600/image004.png"
+        /></a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+Additionally, using the flood zones and the (likely)
+position of the population (population figure or PF) is possible to multiply
+pixel-by-pixel to produce an expected impact value. This is central to
+SPARC, because it offers a monthly, pixel-level number of people who, based on
+historical frequency of hazard occurrence and most recent vulnerability data,
+can be incorporated into humanitarian planning. EIV uses the same logic as the
+expected value of a coin toss: if winning a coin toss is worth one dollar, and one has a 0.5 chance of guessing the
+winning side correctly, the expected value of each toss is 50 cents.<br />Thus
+in a simple SPARC example, if a pixel has a 0.1 chance of being flooded in any
+given March, and an estimated ARP of 1000, its March EIV is 100.<br /><br />The
+second step, uses the ARP figures calculated on an annual basis and disaggregate
+the total value into a series of monthly values. This is achieved by calculating
+the percentage of annual rain falling in any month and applying the same
+probability to the annual figure of people at risk. <br />The monthly
+precipitation rate has been chosen because is known to be the most significant
+trigger for igniting the flood hazard.<br />
+Temporal mean of monthly maximum precipitation in dam network catchment<br />Of
+all inputs considered, at least four of them are directly connected with
+precipitation and is the only parameter which varies monthly whilst other
+factors (such as land cover change) have in general much slower changes
+measurable in years.<br />
+<h3><span lang="">Annual probability assessment</span></h3>
+The combination of yearly average frequency of hazards and exposed populations
+provides the physical exposure and can be computed, depending on cases, using
+the following equation<br /><br />
+<div class="separator" style="clear: both; text-align: center;">
+  <a
+    href="http://3.bp.blogspot.com/-RjY9nPumWAI/Va31r-BWb8I/AAAAAAAABfM/IQfnOrgqAgg/s1600/image007.png"
+    style="margin-left: 1em; margin-right: 1em;"
+    ><img
+      border="0"
+      src="http://3.bp.blogspot.com/-RjY9nPumWAI/Va31r-BWb8I/AAAAAAAABfM/IQfnOrgqAgg/s1600/image007.png"
+  /></a>
+</div>
+<br /><br />where:<br />
+<div style="text-indent: 36pt;">
+  <span lang=""
+    >PhExp = yearly average physical exposure for the spatial unit [exposed
+    population/year].</span
+  >
+</div>
+<div style="text-indent: 36pt;">
+  <span lang=""
+    >F = annual frequency of a given magnitude event [return period /year]</span
+  >
+</div>
+<div style="margin-left: 70.9pt; text-indent: -35.45pt;">
+  <span lang=""
+    >Popi = total population living in the spatial unit for each event “i”
+    [exposed population/event]
+  </span>
+</div>
+<div style="text-align: left;">
+  n = number of events considered (6 for SPARC)
+</div>
+<br />After an initial version using the flood frequency provided by
+UNEP/GRID-Europe PREVIEW 2013 flood dataset, a new set of data in raster format
+(referred from now as GAR15) has being used.<br /><br />This dataset provides
+information on the flood extent and depth for six return periods namely 25, 50,
+100, and 200, 500 and 1000 years<br />Therefore, the flood areas extents will
+have the following annual probabilities of occurrence:<br />
+<div class="MsoListParagraphCxSpFirst" style="text-indent: -18pt;">
+  <span
+    lang=""
+    style='color: black; font-family: "symbol"; font-size: 12pt; line-height: 107%;'
+    >·<span style='font: 7pt "times new roman";'
+      >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </span></span
+  >
+</div>
+<div class="separator" style="clear: both; text-align: center;">
+  <a
+    href="http://4.bp.blogspot.com/-nEy_ZG6m2YI/Va31sdDjOaI/AAAAAAAABfM/T5k3htn2y0k/s1600/image008.jpg"
+    style="clear: left; float: left; margin-bottom: 1em; margin-right: 1em;"
+    ><img
+      border="0"
+      src="http://4.bp.blogspot.com/-nEy_ZG6m2YI/Va31sdDjOaI/AAAAAAAABfM/T5k3htn2y0k/s1600/image008.jpg"
+  /></a>
+</div>
+<ul>
+  <li><span lang="">4% annual probability</span></li>
+  <li><span style='font-family: "symbol";'>2</span>% annual probability</li>
+  <li>1% annual probability</li>
+  <li>0.5% annual probability</li>
+  <li>
+    0.2% annual probability<span
+      lang=""
+      style='color: black; font-family: "symbol"; font-size: 12pt; line-height: 107%;'
+      ><span style='font: 7pt "times new roman";'>&nbsp;</span></span
+    >
+  </li>
+  <li>
+    <span
+      lang=""
+      style='color: black; font-family: "symbol"; font-size: 12pt; line-height: 107%;'
+      ><span style='font: 7pt "times new roman";'>&nbsp;</span></span
+    >0.1% annual probability
+  </li>
+</ul>
+Although some frameworks, including the European Flood Directive, advises that
+three flood hazards return periods are sufficient for estimation purposes, there
+is a wide consensus (Messner et al. 2007) that six return periods should be
+preferably used for estimating flood risk.<br />It is also known, that the most
+accurate estimates on damages and people at risk are achieved when the number of
+return periods are located in the lower tail of the risk curve, while adding an
+extra return period in the upper tail has very little influence on the final
+risk estimate. In this sense, the return periods provided by the GAR 2015
+dataset represent a “quasi-optimal” dataset and could be to some extent
+misbalanced on the right side of the distribution (200, 500, 1000 compared to
+25,50 using 100 years as the median of the distribution).<br />For this
+reason it could be important to check the availability of products about to be
+released by Bristol University that should include a 10 years return period or
+10% annual probability with a total of annual probabilities of four.<br />
+<div
+  class="MsoListParagraphCxSpFirst"
+  style="margin-left: 54pt; text-indent: -18pt;"
+>
+  <span style='font-family: "symbol";'>L</span>ow risk - wet in the 1000 year
+  fluvial-pluvial simulation
+</div>
+<div
+  class="MsoListParagraphCxSpMiddle"
+  style="margin-left: 54pt; text-indent: -18pt;"
+>
+  <span style='font-family: "symbol";'>L</span>ow medium - Wet in the 500 year
+  fluvial-pluvial
+</div>
+<div
+  class="MsoListParagraphCxSpMiddle"
+  style="margin-left: 54pt; text-indent: -18pt;"
+>
+  Medium high - Wet in the 100 year fluvial only simulation
+</div>
+<div
+  class="MsoListParagraphCxSpLast"
+  style="margin-left: 54pt; text-indent: -18pt;"
+>
+  High - Wet in the 10 year fluvial only
+</div>
+<a
+  href="http://3.bp.blogspot.com/-5B4QUbJG4A8/Va31s2X1CZI/AAAAAAAABfM/yS-DkEgQ_Hc/s1600/image009.jpg"
+  ><img
+    border="0"
+    src="http://3.bp.blogspot.com/-5B4QUbJG4A8/Va31s2X1CZI/AAAAAAAABfM/yS-DkEgQ_Hc/s1600/image009.jpg"
+/></a>
+<br />
+<div class="MsoCaption">
+  <a href="https://www.blogger.com/null" name="_Toc416350655"
+    ><span lang="">Figure </span></a
+  ><span lang="">3</span
+  ><span lang="">
+    – Taiwan flood raster dataset in development at Bristol University</span
+  >
+</div>
+<br />Is important to recall that alterations to watercourses, such as
+channelization, change the validity of all historic data collected over the
+years, as well as the results of hydraulic modelling, therefore the boundaries
+of the flood prone areas could be quite different from the real ones. During the
+flooding of the Mississippi River in 1973 and 1993 water level rose to higher
+levels than expected from the statistical data, because modification of the
+stream had made the data invalid. The 1973 flood caused damage and rose to
+levels that might be expected from a 200-year flood, even though discharge was
+only a level predicted for a 30 years flood.<br /><br />Due to the global nature
+of the GAR project, flood maps do not take into account flood defenses that are
+normally present to preserve the value exposed to floods. This can strongly
+influence the results of the risk calculations and especially of the economic
+parameters and creates a hiatus between the “coarse” scale of the flood data
+used and the detailed calculation required to assess risk at provincial level.
+This is especially relevant in countries where provinces are very small and
+would require a much more “realistic” flood extents but at the expense of the
+feasibility of the whole SPARC project.<br />The results of this is that the
+final calculation seems to overestimate the number of people at risk although in
+most cases the figures calculated are comparable with the outcomes of other
+studies and real flood events.<br /><br />Once the number of people affected
+associated to each annual probability have been calculated, the theoretical risk
+model of six values has been used to calculate additional probabilities (e.g.,
+150 years return period using a curve fitting as visible in the next figure.<br />
+<table
+  border="0"
+  cellpadding="0"
+  cellspacing="0"
+  class="MsoTableGrid"
+  style="border-collapse: collapse; border-style: none;"
+>
+  <tbody>
+    <tr>
+      <td style="padding: 0cm 5.4pt; width: 243.4pt;" valign="top" width="325">
+        <a
+          href="http://1.bp.blogspot.com/-UQzPxW_3G2s/Va31s7up17I/AAAAAAAABfM/SKKaiYdGTQQ/s1600/image010.jpg"
+          ><img
+            border="0"
+            src="http://1.bp.blogspot.com/-UQzPxW_3G2s/Va31s7up17I/AAAAAAAABfM/SKKaiYdGTQQ/s1600/image010.jpg"
+        /></a>
+      </td>
+      <td style="padding: 0cm 5.4pt; width: 243.4pt;" valign="top" width="325">
+        <a
+          href="http://4.bp.blogspot.com/-HabOfcgGcZE/Va31tOrH4MI/AAAAAAAABfM/fZb4nX6SmQk/s1600/image011.jpg"
+          ><img
+            border="0"
+            src="http://4.bp.blogspot.com/-HabOfcgGcZE/Va31tOrH4MI/AAAAAAAABfM/fZb4nX6SmQk/s1600/image011.jpg"
+        /></a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+This interim values cannot, evidently, be mapped because the extent of flooded
+areas is the result of hydraulic modelling undertaken for GAR15 and the
+hydraulic model files have not been provided. Nevertheless is possible to have
+an estimation for the possible number of people affected for this additional
+annual probabilities.<br />
+<h3 style="margin-bottom: 6pt;">
+  <span lang="">Monthly disaggregation of people at risk of flooding</span
+  ><span lang=""> </span>
+</h3>
+<a
+  href="http://2.bp.blogspot.com/-SvZl09V9OEM/Va31tru8DrI/AAAAAAAABfM/z28qIqmzqT4/s1600/image012.jpg"
+  ><img
+    align="left"
+    border="0"
+    src="http://2.bp.blogspot.com/-SvZl09V9OEM/Va31tru8DrI/AAAAAAAABfM/z28qIqmzqT4/s1600/image012.jpg" /></a
+>Floods are usually caused by heavy or prolonged rainfall but can also occur
+  due to landslides triggered by heavy rainfall or earthquakes, failure of dams
+  or hydraulic structures, or high sea levels at river mouths.</span
+><br />Based on the commonly adopted “Source-Pathway-Receptor-Consequence”
+model, it is assumed that the source (precursor event) is rainfall and higher
+levels of precipitation are very likely to lead to high river discharge and
+consequently to flood events.<br />This approach, sometimes referred as
+“correlation with triggers”, has been successfully applied in landslide hazard
+analysis and is based on the assumption that the frequency of the landslides (or
+flood) is that of the triggering event. <br />This method, applied to floods,
+has a few drawbacks (e.g. different triggers can cause an event for example
+rainfall or snowmelt) yet seems a viable solution for establishing a simple
+procedure capable of disaggregating the annual probability into a monthly
+one.<br />In a future version the plan is to develop several correlations for
+different climatic regions using, for example, the monthly distribution of
+rainfall in regions where they are the main trigger of the floods and the data
+of snow cover in areas where flooding is due to snow-melt.<br />An additional
+improvement could use a stochastically generated rainfall based on the actual
+historical precipitation pattern. Recently, Thyer and Kuczera (1999) developed a
+hidden state Markov model to account for the wet and dry spells explicitly in
+annual rainfall.<br />In this preliminary phase, no attempt will be made to use
+any stochastically generated annual, monthly and daily precipitation but time
+and funds permitting, a Monte Carlo approach will be used to take into account
+year-to-year variations parameter where long periods of wet and dry years are
+observed.<br />In this early phase, however an attempt will be made to consider
+not only precipitation by adding additional factors (e.g. evapotranspiration) to
+build a more realistic scenario able perhaps to provide a more reliable
+short-term monthly estimates of flood occurrences likelihood.<br />For this
+purpose, several raster datasets were used, amongst those available at FAO
+geonetwork, for analysing different aspects of the flood phenomena according to
+the equation above.<br />The precipitation dataset chosen is a grid with
+estimated precipitation per month with a spatial resolution of 10 arc minutes.
+This dataset has been constructed from 27 075 stations with 1961-1990
+climatological normals. The dataset consists of 12 ASCII-grids with mean monthly
+data in mm/day * 10, and one ASCII-grid with yearly data in mm/year. In
+addition, 12 ASCII-grid with monthly values at 5 arc minutes resolution are made
+available as input data for a global water balance model (GlobWat).<br />The
+following image depict three different raster containing information on
+precipitation in January, June and August in Cameroon.<br />
+<table
+  border="1"
+  cellpadding="0"
+  cellspacing="0"
+  class="MsoTableGrid"
+  style="border-collapse: collapse; border-style: none;"
+>
+  <tbody>
+    <tr style="height: 135.35pt;">
+      <td
+        style="border-style: none; height: 135.35pt; padding: 0cm 5.4pt; width: 155.95pt;"
+        valign="top"
+        width="208"
+      >
+        <a
+          href="http://2.bp.blogspot.com/-ONvfX65eKCk/Va31t85U-KI/AAAAAAAABfM/uxcJgioSwO8/s1600/image014.jpg"
+          ><img
+            border="0"
+            src="http://2.bp.blogspot.com/-ONvfX65eKCk/Va31t85U-KI/AAAAAAAABfM/uxcJgioSwO8/s1600/image014.jpg"
+        /></a>
+      </td>
+      <td
+        style="border-style: none; height: 135.35pt; padding: 0cm 5.4pt; width: 155.9pt;"
+        valign="top"
+        width="208"
+      >
+        <a
+          href="http://2.bp.blogspot.com/-uSZVKBVocSE/Va31uKPhmWI/AAAAAAAABfM/DDxzPeZR2jQ/s1600/image015.jpg"
+          ><img
+            border="0"
+            src="http://2.bp.blogspot.com/-uSZVKBVocSE/Va31uKPhmWI/AAAAAAAABfM/DDxzPeZR2jQ/s1600/image015.jpg"
+        /></a>
+      </td>
+      <td
+        style="border-style: none; height: 135.35pt; padding: 0cm 5.4pt; width: 175.45pt;"
+        valign="top"
+        width="234"
+      >
+        <a
+          href="http://4.bp.blogspot.com/-uWyDXm8YNOc/Va31uee0kQI/AAAAAAAABfM/GDc-2xjeCHo/s1600/image016.jpg"
+          ><img
+            border="0"
+            src="http://4.bp.blogspot.com/-uWyDXm8YNOc/Va31uee0kQI/AAAAAAAABfM/GDc-2xjeCHo/s1600/image016.jpg"
+        /></a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+Using the whole set of twelve raster, the annual distribution of rain is
+calculated for each province worldwide (province are black lines in the previous
+image) calculating the mean millimetres registered between 1961 and 1990 in
+order to generate the distribution of rain in that administrative level as
+visible in the following pictures.<br />
+<table
+  border="1"
+  cellpadding="0"
+  cellspacing="0"
+  class="MsoTableGrid"
+  style="border-collapse: collapse; border-style: none;"
+>
+  <tbody>
+    <tr style="height: 135.35pt;">
+      <td
+        style="border-style: none; height: 135.35pt; padding: 0cm 5.4pt; width: 148.85pt;"
+        valign="top"
+        width="198"
+      >
+        <a
+          href="http://4.bp.blogspot.com/-iXGQF6OEV14/Va31uqZ50BI/AAAAAAAABfM/dM2tRc-dU9o/s1600/image017.jpg"
+          ><img
+            border="0"
+            src="http://4.bp.blogspot.com/-iXGQF6OEV14/Va31uqZ50BI/AAAAAAAABfM/dM2tRc-dU9o/s1600/image017.jpg" /></a
+        >&nbsp;<a
+          href="http://3.bp.blogspot.com/-uETSpg9DgCQ/Va31umw3iYI/AAAAAAAABfM/jFtz82EOn6M/s1600/image018.jpg"
+          ><img
+            border="0"
+            src="http://3.bp.blogspot.com/-uETSpg9DgCQ/Va31umw3iYI/AAAAAAAABfM/jFtz82EOn6M/s1600/image018.jpg"
+        /></a>
+      </td>
+      <td
+        style="border-style: none; height: 135.35pt; padding: 0cm 5.4pt; width: 4cm;"
+        valign="top"
+        width="151"
+      >
+        <a
+          href="http://3.bp.blogspot.com/-wZ5ZjYdkgN0/Va31u36syRI/AAAAAAAABfM/5P7FmOYLXT4/s1600/image019.jpg"
+          ><img
+            border="0"
+            src="http://3.bp.blogspot.com/-wZ5ZjYdkgN0/Va31u36syRI/AAAAAAAABfM/5P7FmOYLXT4/s1600/image019.jpg"
+        /></a>
+      </td>
+      <td
+        style="border-style: none; height: 135.35pt; padding: 0cm 5.4pt; width: 225.05pt;"
+        valign="top"
+        width="300"
+      >
+        <a
+          href="http://4.bp.blogspot.com/-zko7L_aKhIk/Va31vKlKHiI/AAAAAAAABfM/2O_WLNAeSAk/s1600/image020.jpg"
+          ><img
+            border="0"
+            src="http://4.bp.blogspot.com/-zko7L_aKhIk/Va31vKlKHiI/AAAAAAAABfM/2O_WLNAeSAk/s1600/image020.jpg"
+        /></a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+On the left are represented the different level of precipitation in raster
+format for different months for a province, the numerical values of the
+precipitation and finally the discrete distribution of the precipitation.<br />
+<div style="break-after: avoid; margin-bottom: 6pt;"></div>
+The following table represent the final calculation for on province, including
+the normalization of the raw data, adjusting values measured on different scales
+to a notionally common scale.<br />
+<table class="table">
+  <thead>
+    <tr>
+        <th>Months</th>
+        <th>Prec.</th>
+        <th>Evotrasp.</th>
+        <th>Inc.</th>
+        <th>AVP</th>
+        <th>Prec. Norm.</th>
+        <th>Evotrasp. Norm</th>
+        <th>Inc Norm</th>
+        <th>Score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Jan</td>
+      <td>3.14</td>
+      <td>136.52</td>
+      <td>0</td>
+      <td>197.27</td>
+      <td>0.00</td>
+      <td>0.69</td>
+      <td>0.00</td>
+      <td>0.91</td>
+    </tr>
+  </tbody>
+    <tr> 
+    <td>Feb</td>
+      <td>9.12</td>
+      <td>138.90</td>
+      <td>0</td>
+      <td>138.82</td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 65.3pt;"
+        valign="bottom"
+        width="87"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.07</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 81.45pt;"
+        valign="bottom"
+        width="109"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.73</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 51.55pt;"
+        valign="bottom"
+        width="69"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.00</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom-color: rgb(0, 176, 240); border-bottom-width: 1pt; border-left-style: none; border-right-style: none; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 50.05pt;"
+        valign="bottom"
+        width="67"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.59</span>
+        </div>
+      </td>
+    </tr>
+    <tr style="height: 15pt;">
+      <td>
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <b><span lang="" style="font-size: 10pt;">Mar</span></b>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 36.6pt;"
+        valign="bottom"
+        width="49"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">27.02</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 56.25pt;"
+        valign="bottom"
+        width="75"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">154.24</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 40.25pt;"
+        valign="bottom"
+        width="54"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 42.75pt;"
+        valign="bottom"
+        width="57"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">69.80</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 65.3pt;"
+        valign="bottom"
+        width="87"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.27</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 81.45pt;"
+        valign="bottom"
+        width="109"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">1.00</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 51.55pt;"
+        valign="bottom"
+        width="69"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.00</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom-color: rgb(0, 176, 240); border-bottom-width: 1pt; border-left-style: none; border-right-style: none; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 50.05pt;"
+        valign="bottom"
+        width="67"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.21</span>
+        </div>
+      </td>
+    </tr>
+    <tr style="height: 15pt;">
+      <td>
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <b><span lang="" style="font-size: 10pt;">Apr</span></b>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 36.6pt;"
+        valign="bottom"
+        width="49"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">45.91</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 56.25pt;"
+        valign="bottom"
+        width="75"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">140.64</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 40.25pt;"
+        valign="bottom"
+        width="54"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 42.75pt;"
+        valign="bottom"
+        width="57"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">44.13</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 65.3pt;"
+        valign="bottom"
+        width="87"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.47</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 81.45pt;"
+        valign="bottom"
+        width="109"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.76</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 51.55pt;"
+        valign="bottom"
+        width="69"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.00</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom-color: rgb(0, 176, 240); border-bottom-width: 1pt; border-left-style: none; border-right-style: none; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 50.05pt;"
+        valign="bottom"
+        width="67"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.06</span>
+        </div>
+      </td>
+    </tr>
+    <tr style="height: 15pt;">
+      <td>
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <b><span lang="" style="font-size: 10pt;">May</span></b>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 36.6pt;"
+        valign="bottom"
+        width="49"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">59.91</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 56.25pt;"
+        valign="bottom"
+        width="75"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">137.12</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 40.25pt;"
+        valign="bottom"
+        width="54"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 42.75pt;"
+        valign="bottom"
+        width="57"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">34.03</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 65.3pt;"
+        valign="bottom"
+        width="87"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.63</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 81.45pt;"
+        valign="bottom"
+        width="109"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.70</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 51.55pt;"
+        valign="bottom"
+        width="69"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.00</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom-color: rgb(0, 176, 240); border-bottom-width: 1pt; border-left-style: none; border-right-style: none; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 50.05pt;"
+        valign="bottom"
+        width="67"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.01</span>
+        </div>
+      </td>
+    </tr>
+    <tr style="height: 15pt;">
+      <td>
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <b><span lang="" style="font-size: 10pt;">Jun</span></b>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 36.6pt;"
+        valign="bottom"
+        width="49"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">74.88</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 56.25pt;"
+        valign="bottom"
+        width="75"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">113.68</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 40.25pt;"
+        valign="bottom"
+        width="54"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">2</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 42.75pt;"
+        valign="bottom"
+        width="57"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">32.74</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 65.3pt;"
+        valign="bottom"
+        width="87"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.80</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 81.45pt;"
+        valign="bottom"
+        width="109"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.30</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 51.55pt;"
+        valign="bottom"
+        width="69"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.67</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom-color: rgb(0, 176, 240); border-bottom-width: 1pt; border-left-style: none; border-right-style: none; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 50.05pt;"
+        valign="bottom"
+        width="67"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.00</span>
+        </div>
+      </td>
+    </tr>
+    <tr style="height: 15pt;">
+      <td>
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <b><span lang="" style="font-size: 10pt;">Jul</span></b>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 36.6pt;"
+        valign="bottom"
+        width="49"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">84.05</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 56.25pt;"
+        valign="bottom"
+        width="75"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">99.65</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 40.25pt;"
+        valign="bottom"
+        width="54"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">3</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 42.75pt;"
+        valign="bottom"
+        width="57"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">41.81</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 65.3pt;"
+        valign="bottom"
+        width="87"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.90</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 81.45pt;"
+        valign="bottom"
+        width="109"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.05</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 51.55pt;"
+        valign="bottom"
+        width="69"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">1.00</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom-color: rgb(0, 176, 240); border-bottom-width: 1pt; border-left-style: none; border-right-style: none; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 50.05pt;"
+        valign="bottom"
+        width="67"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.05</span>
+        </div>
+      </td>
+    </tr>
+    <tr style="height: 15pt;">
+      <td>
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <b><span lang="" style="font-size: 10pt;">Aug</span></b>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 36.6pt;"
+        valign="bottom"
+        width="49"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">76.60</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 56.25pt;"
+        valign="bottom"
+        width="75"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">96.55</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 40.25pt;"
+        valign="bottom"
+        width="54"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">2</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 42.75pt;"
+        valign="bottom"
+        width="57"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">53.72</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 65.3pt;"
+        valign="bottom"
+        width="87"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.82</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 81.45pt;"
+        valign="bottom"
+        width="109"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.00</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 51.55pt;"
+        valign="bottom"
+        width="69"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.67</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom-color: rgb(0, 176, 240); border-bottom-width: 1pt; border-left-style: none; border-right-style: none; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 50.05pt;"
+        valign="bottom"
+        width="67"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.12</span>
+        </div>
+      </td>
+    </tr>
+    <tr style="height: 15pt;">
+      <td>
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <b><span lang="" style="font-size: 10pt;">Sep</span></b>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 36.6pt;"
+        valign="bottom"
+        width="49"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">93.25</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 56.25pt;"
+        valign="bottom"
+        width="75"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">102.84</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 40.25pt;"
+        valign="bottom"
+        width="54"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">2</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 42.75pt;"
+        valign="bottom"
+        width="57"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">33.72</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 65.3pt;"
+        valign="bottom"
+        width="87"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">1.00</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 81.45pt;"
+        valign="bottom"
+        width="109"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.11</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 51.55pt;"
+        valign="bottom"
+        width="69"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.67</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom-color: rgb(0, 176, 240); border-bottom-width: 1pt; border-left-style: none; border-right-style: none; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 50.05pt;"
+        valign="bottom"
+        width="67"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.01</span>
+        </div>
+      </td>
+    </tr>
+    <tr style="height: 15pt;">
+      <td>
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <b><span lang="" style="font-size: 10pt;">Oct</span></b>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 36.6pt;"
+        valign="bottom"
+        width="49"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">63.52</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 56.25pt;"
+        valign="bottom"
+        width="75"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">122.28</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 40.25pt;"
+        valign="bottom"
+        width="54"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">2</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 42.75pt;"
+        valign="bottom"
+        width="57"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">40.61</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 65.3pt;"
+        valign="bottom"
+        width="87"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.67</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 81.45pt;"
+        valign="bottom"
+        width="109"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.45</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 51.55pt;"
+        valign="bottom"
+        width="69"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.67</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom-color: rgb(0, 176, 240); border-bottom-width: 1pt; border-left-style: none; border-right-style: none; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 50.05pt;"
+        valign="bottom"
+        width="67"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.04</span>
+        </div>
+      </td>
+    </tr>
+    <tr style="height: 15pt;">
+      <td>
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <b><span lang="" style="font-size: 10pt;">Nov</span></b>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 36.6pt;"
+        valign="bottom"
+        width="49"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">13.78</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 56.25pt;"
+        valign="bottom"
+        width="75"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">126.76</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 40.25pt;"
+        valign="bottom"
+        width="54"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 42.75pt;"
+        valign="bottom"
+        width="57"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">115.94</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 65.3pt;"
+        valign="bottom"
+        width="87"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.12</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 81.45pt;"
+        valign="bottom"
+        width="109"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.52</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 51.55pt;"
+        valign="bottom"
+        width="69"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.00</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom-color: rgb(0, 176, 240); border-bottom-width: 1pt; border-left-style: none; border-right-style: none; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 50.05pt;"
+        valign="bottom"
+        width="67"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.46</span>
+        </div>
+      </td>
+    </tr>
+    <tr style="height: 15pt;">
+      <td
+        nowrap=""
+        style="border-bottom-style: none; border-left-style: none; border-right-color: rgb(0, 176, 240); border-right-width: 1pt; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 63.1pt;"
+        valign="bottom"
+        width="84"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <b><span lang="" style="font-size: 10pt;">Dec</span></b>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom-style: none; border-left-style: none; border-right-color: rgb(0, 176, 240); border-right-width: 1pt; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 36.6pt;"
+        valign="bottom"
+        width="49"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">3.74</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom-style: none; border-left-style: none; border-right-color: rgb(0, 176, 240); border-right-width: 1pt; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 56.25pt;"
+        valign="bottom"
+        width="75"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">123.86</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom-style: none; border-left-style: none; border-right-color: rgb(0, 176, 240); border-right-width: 1pt; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 40.25pt;"
+        valign="bottom"
+        width="54"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom-style: none; border-left-style: none; border-right-color: rgb(0, 176, 240); border-right-width: 1pt; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 42.75pt;"
+        valign="bottom"
+        width="57"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">213.52</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom-style: none; border-left-style: none; border-right-color: rgb(0, 176, 240); border-right-width: 1pt; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 65.3pt;"
+        valign="bottom"
+        width="87"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.01</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom-style: none; border-left-style: none; border-right-color: rgb(0, 176, 240); border-right-width: 1pt; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 81.45pt;"
+        valign="bottom"
+        width="109"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.47</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-bottom-style: none; border-left-style: none; border-right-color: rgb(0, 176, 240); border-right-width: 1pt; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 51.55pt;"
+        valign="bottom"
+        width="69"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">0.00</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-style: none; height: 15pt; padding: 0cm 5.4pt; width: 50.05pt;"
+        valign="bottom"
+        width="67"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          <span lang="" style="font-size: 10pt;">1.00</span>
+        </div>
+      </td>
+    </tr>
+  </thead>
+</table>
+  Evaporation is known to be the least of these quantities, particularly over
+  short periods of time, but is the only data available together with
+  precipitation on a monthly basis whereas infiltration and interception were
+  assessed only partially as they should be derived from soil data and could
+  easily require a study per se.
+
+
+  Finally, the historical variability of precipitation has been used to see if
+  all months are equally affected by high level of variability in terms of
+  precipitation. Al the meteorological data have been compared with the
+  historical occurrences related with flood, in order to evaluate any noticeable
+  correlation.The result is visible in the next figure.<br /><a
+    href="http://3.bp.blogspot.com/-MCf-TYu9oeU/Va31vQxwgoI/AAAAAAAABfM/xORLlSmrQyE/s1600/image021.png"
+    style="margin-left: 1em; margin-right: 1em;"
+    ><img
+      border="0"
+      src="http://3.bp.blogspot.com/-MCf-TYu9oeU/Va31vQxwgoI/AAAAAAAABfM/xORLlSmrQyE/s1600/image021.png"
+  /></a>
+
+It seems evident that, as expected, the monthly precipitation presents a strong
+correlation with historical accidents and substantiate the choice to link the
+number of possible people affected month-by-month with the precipitation
+pattern. Evapotranspiration on the other hand, although showing a similar trend
+risk is not adding any significant improvement to the calculation using the rain
+pattern.<br />The variation of precipitation is probably also quite interesting
+showing that in months with more intense rainfall are also those with greater
+stability in the amount of precipitation, which instead is very high in the
+months with little precipitation.<br />This factor seems to be perfectly
+reasonable because, if there is little rain, a single heavy rain increases the
+spread between minimum and maximum values and therefore the variability. On the
+other hand we are comforted to know that the greatest error of estimate, in
+terms of population at risk, are to be expected to be found in months with
+minimal amount of precipitation and therefore with a lower level of risk.<br />The
+next image shows the level of correlation calculated in a province in India<br />
+
+    <tr>
+      <td style="padding: 0cm 5.4pt; width: 208.95pt;" valign="top" width="279">
+        <a
+          href="http://4.bp.blogspot.com/-0v8E93VBThs/Va31vXO92yI/AAAAAAAABfM/k6A5tJe18O8/s1600/image022.jpg"
+          ><img
+            border="0"
+            src="http://4.bp.blogspot.com/-0v8E93VBThs/Va31vXO92yI/AAAAAAAABfM/k6A5tJe18O8/s1600/image022.jpg"
+        /></a>
+      </td>
+      <td style="padding: 0cm 5.4pt; width: 259.85pt;" valign="top" width="346">
+        <a
+          href="http://3.bp.blogspot.com/-duvsvJ7WBk0/Va31vvUG0KI/AAAAAAAABfM/Bao8AbrsOcc/s1600/image023.jpg"
+          ><img
+            border="0"
+            src="http://3.bp.blogspot.com/-duvsvJ7WBk0/Va31vvUG0KI/AAAAAAAABfM/Bao8AbrsOcc/s1600/image023.jpg"
+        /></a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+    <span lang="">Figure </span></a
+  ><span lang="">5</span
+  ><span lang="">
+    - Correlation between historical accidents and precipitation by month</span
+  >
+</div>
+<br />The first column represents months, the second the millimetres of rain
+normalize between 0 and 1 and the number of accidents also normalized to make
+the comparison easier with precipitation values. The image on the left shows an
+almost perfect positive correlation (+1) with the month of July showing the
+highest values both for millimetres of rain and number of accidents<br />The
+number of people possibly affected by month have been therefore estimated
+multiplying the monthly historical distribution of precipitations, normalized in
+order to derive percentages of probability, and the number of people affected by
+flood for each returning period<br />
+<div align="center">
+  <table
+    border="1"
+    cellpadding="0"
+    cellspacing="0"
+    class="MsoTableGrid"
+    style="border-collapse: collapse; border-style: none; width: 646px;"
+  >
+    <tbody>
+      <tr style="height: 156.1pt;">
+        <td
+          style="border-style: none; height: 156.1pt; padding: 0cm 5.4pt; width: 238.05pt;"
+          valign="top"
+          width="317"
+        >
+          <a
+            href="http://3.bp.blogspot.com/-8htKiKYkEK8/Va31v2-vLNI/AAAAAAAABfM/HeFzVmBVmfk/s1600/image024.jpg"
+            ><img
+              border="0"
+              src="http://3.bp.blogspot.com/-8htKiKYkEK8/Va31v2-vLNI/AAAAAAAABfM/HeFzVmBVmfk/s1600/image024.jpg"
+          /></a>
+        </td>
+        <td
+          style="border-style: none; height: 156.1pt; padding: 0cm 5.4pt; width: 246.8pt;"
+          valign="top"
+          width="329"
+        >
+          <a
+            href="http://4.bp.blogspot.com/-2T88QaJfvEU/Va31wDywNrI/AAAAAAAABfM/Df2GSPC-CEY/s1600/image025.jpg"
+            ><img
+              border="0"
+              src="http://4.bp.blogspot.com/-2T88QaJfvEU/Va31wDywNrI/AAAAAAAABfM/Df2GSPC-CEY/s1600/image025.jpg"
+          /></a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+In the image above, on the left, is shown a plot of rain versus accidents in
+Cameroon whilst, on the right, is possible to see how well the distributions of
+the rain is much more in accordance with the peak of accidents registered in
+July, the rainiest month in that part of India.<br /><a
+  href="http://4.bp.blogspot.com/-X3-5RMCM0s0/Va31wGACDFI/AAAAAAAABfM/AK1M4cgf7I0/s1600/image026.jpg"
+  ><img
+    align="left"
+    border="0"
+    src="http://4.bp.blogspot.com/-X3-5RMCM0s0/Va31wGACDFI/AAAAAAAABfM/AK1M4cgf7I0/s1600/image026.jpg"
+    style="display: inline; float: left;" /></a
+><span lang=""
+  >Of course, not all provinces have such a strong level of correlation. In the
+  image on the left there the case of the administrative area of Bolivar in
+  Peru. Is possible to see that both incidents and precipitation have a bimodal
+  distribution and the minimum precipitation registered in August reflects in
+  the absence of accidents in the same month though the peak is slightly shifted
+  by a month or so.</span
+><br />Applying this methodology on several administrative areas, chosen in
+different climatic zones (such as tropical, arid, temperate), it can be stated
+that the correlation is very strong in urban areas and in countries where the
+accidents have been regularly and systematically collected.<br />On the other
+hand, in areas where little or no data are available the monthly risk could lead
+to misleading calculation and instead of being applied directly would require
+additional thinking and further data collection.<br />For this reason, an index
+has been calculated for every province as a <br /><span class="hps"
+  ><span lang="EN">conformity</span></span
+><span lang="EN">
+  <span class="hps">between</span> <span class="hps">precipitation data</span>
+  <span class="hps">and</span> <span class="hps">historical records of</span>
+  <span class="hps">accident</span></span
+><span lang="EN"> </span
+><span lang=""
+  >to provide a measure of the reliability of the figures calculated in terms of
+  population at risk. In the image below, the monthly subdivision of people at
+  risk can be estimated to be reasonably true for areas with many events
+  registered (for global maps see Appendix A).</span
+>
+<br />
+<table
+  border="0"
+  cellpadding="0"
+  cellspacing="0"
+  class="MsoTableGrid"
+  style="border-collapse: collapse; border-style: none;"
+>
+  <tbody>
+    <tr>
+      <td style="padding: 0cm 5.4pt; width: 244.8pt;" valign="top" width="326">
+        <div style="text-indent: 36pt;">
+          <a
+            href="http://2.bp.blogspot.com/-h1ly97FNaL8/Va31wWP7vaI/AAAAAAAABfM/4ZcCfWfuTYw/s1600/image028.jpg"
+            ><img
+              border="0"
+              src="http://2.bp.blogspot.com/-h1ly97FNaL8/Va31wWP7vaI/AAAAAAAABfM/4ZcCfWfuTYw/s1600/image028.jpg"
+          /></a>
+        </div>
+      </td>
+      <td style="padding: 0cm 5.4pt; width: 242.5pt;" valign="top" width="323">
+        <a
+          href="http://3.bp.blogspot.com/-mgqB36KxZ4E/Va31wlVmisI/AAAAAAAABfM/zcih3hG3Yns/s1600/image029.jpg"
+          ><img
+            border="0"
+            src="http://3.bp.blogspot.com/-mgqB36KxZ4E/Va31wlVmisI/AAAAAAAABfM/zcih3hG3Yns/s1600/image029.jpg"
+        /></a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<span lang="">Examples of population at risk for three provinces.</span><br />
+<div align="center">
+  <table
+    align="center"
+    border="0"
+    cellpadding="0"
+    cellspacing="0"
+    class="MsoTableGrid"
+    style="border-collapse: collapse; border-style: none;"
+  >
+    <tbody>
+      <tr>
+        <td
+          style="padding: 0cm 5.4pt; width: 162.25pt;"
+          valign="top"
+          width="216"
+        >
+          <a
+            href="http://1.bp.blogspot.com/-6cK22LfjuEY/Va31w8fmJMI/AAAAAAAABfM/QcfSGoJ7UOQ/s1600/image030.png"
+            ><img
+              border="0"
+              src="http://1.bp.blogspot.com/-6cK22LfjuEY/Va31w8fmJMI/AAAAAAAABfM/QcfSGoJ7UOQ/s1600/image030.png"
+          /></a>
+        </td>
+        <td
+          style="padding: 0cm 5.4pt; width: 162.25pt;"
+          valign="top"
+          width="216"
+        >
+          <a
+            href="http://1.bp.blogspot.com/-_si9yQpzqm0/Va31xG-niUI/AAAAAAAABfM/9wMu043pdpE/s1600/image031.png"
+            ><img
+              border="0"
+              src="http://1.bp.blogspot.com/-_si9yQpzqm0/Va31xG-niUI/AAAAAAAABfM/9wMu043pdpE/s1600/image031.png"
+          /></a>
+        </td>
+        <td
+          style="padding: 0cm 5.4pt; width: 162.3pt;"
+          valign="top"
+          width="216"
+        >
+          <a
+            href="http://3.bp.blogspot.com/-DRrn_OBmNXM/Va31xIQvlvI/AAAAAAAABfM/BNPobZblCe8/s1600/image032.jpg"
+            ><img
+              border="0"
+              src="http://3.bp.blogspot.com/-DRrn_OBmNXM/Va31xIQvlvI/AAAAAAAABfM/BNPobZblCe8/s1600/image032.jpg"
+          /></a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<h3><span lang="">Sensitivity Analysis</span></h3>
+Sensitivity analysis is a prerequisite for model building since it determines
+the reliability of the model through assessment of uncertainties in the
+simulation results. In order to evaluate the dependency of the calculated values
+and the importance of each input parameter - population, flood extent and
+precipitation – a simple sensitivity analysis has been performed using the
+following variation from the baseline data:<br />
+<table
+  border="1"
+  cellpadding="0"
+  cellspacing="0"
+  class="GridTable4Accent1"
+  style="border-collapse: collapse; border-style: none;"
+>
+  <tbody>
+    <tr>
+      <td
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: solid solid solid none; border-top: 1pt solid rgb(91, 155, 213); padding: 0cm 5.4pt; width: 163.05pt;"
+        valign="top"
+        width="217"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          Factor
+        </div>
+      </td>
+      <td
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-style: solid none; border-top: 1pt solid rgb(91, 155, 213); padding: 0cm 5.4pt; width: 287.75pt;"
+        valign="top"
+        width="384"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          Modification
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; padding: 0cm 5.4pt; width: 163.05pt;"
+        valign="top"
+        width="217"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          Flood Extent raster 25 years RP
+        </div>
+      </td>
+      <td
+        style="border-bottom-color: rgb(0, 176, 240); border-bottom-width: 1pt; border-left-style: none; border-right-style: none; border-top-style: none; padding: 0cm 5.4pt; width: 287.75pt;"
+        valign="top"
+        width="384"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          Calculating the percent increase in terms of population within each
+          return periods extent
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td
+        style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; padding: 0cm 5.4pt; width: 163.05pt;"
+        valign="top"
+        width="217"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          Monthly precipitation
+        </div>
+      </td>
+      <td
+        style="border-bottom-color: rgb(0, 176, 240); border-bottom-width: 1pt; border-left-style: none; border-right-style: none; border-top-style: none; padding: 0cm 5.4pt; width: 287.75pt;"
+        valign="top"
+        width="384"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          Different data sources providing estimates of precipitation divided by
+          month (World Bank Climate, CHIRPS)
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td
+        style="border-bottom: 1pt solid rgb(156, 194, 229); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; padding: 0cm 5.4pt; width: 163.05pt;"
+        valign="top"
+        width="217"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          Population
+        </div>
+      </td>
+      <td
+        style="border-bottom-color: rgb(156, 194, 229); border-bottom-width: 1pt; border-left-style: none; border-right-style: none; border-top-style: none; padding: 0cm 5.4pt; width: 287.75pt;"
+        valign="top"
+        width="384"
+      >
+        <div
+          align="center"
+          style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+        >
+          Using two different dataset (WorldPop and LandScan)
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p>
+  The population dataset chosen does not seem to have great influence on the
+  final outcome because the population, although distributed spatially following
+  different patterns, is using the census data as baseline data. Both datasets
+  are there limiting the total number of people residing in an administrative
+  area to the people calculated by the census in a specific year, using
+  transport networks as an important factor of attraction for the people looking
+  for convenient locations<br />In the next image<span lang="">
+    is possible to see how, although with some minor changes in terms of people
+    affected by frequency categories, the overall number of people affected
+    remains the same using LandScan or WorldPop.</span
+  >
+</p>
+<p></p>
+<table border="0" cellpadding="2" cellspacing="0" style="width: 400px;">
+  <tbody>
+    <tr>
+      <td valign="top" width="200">
+        <a
+          href="http://1.bp.blogspot.com/-ULSsPFYUJfY/Va31yFE6-mI/AAAAAAAABfM/hunu4k8_aXQ/s1600/image033.png"
+          ><img
+            border="0"
+            src="http://1.bp.blogspot.com/-ULSsPFYUJfY/Va31yFE6-mI/AAAAAAAABfM/hunu4k8_aXQ/s1600/image033.png"
+        /></a>
+      </td>
+      <td valign="top" width="200">
+        <a
+          href="http://2.bp.blogspot.com/-YX_AGG4uEv4/Va31yxY4i0I/AAAAAAAABfM/QNsy9ct5z28/s1600/image034.png"
+          ><img
+            border="0"
+            src="http://2.bp.blogspot.com/-YX_AGG4uEv4/Va31yxY4i0I/AAAAAAAABfM/QNsy9ct5z28/s1600/image034.png"
+        /></a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br />
+<p></p>
+<table border="0" cellpadding="2" cellspacing="0" style="width: 400px;">
+  <tbody>
+    <tr>
+      <td valign="top" width="200">
+        <img
+          align="left"
+          border="0"
+          height="240"
+          src="http://2.bp.blogspot.com/-t6j46aleMDM/Va31yzJvkLI/AAAAAAAABfM/QWpD6db3Pwg/s1600/image035.png"
+          style="display: inline; float: left;"
+          width="284"
+        />
+      </td>
+      <td valign="top" width="200">
+        <a
+          href="http://2.bp.blogspot.com/-L1Za-8F-WOY/Va31zF9mBII/AAAAAAAABfM/TM16TRnkgMo/s1600/image036.png"
+          ><img
+            border="0"
+            height="239"
+            src="http://2.bp.blogspot.com/-L1Za-8F-WOY/Va31zF9mBII/AAAAAAAABfM/TM16TRnkgMo/s1600/image036.png"
+            width="283"
+        /></a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p>
+  The precipitation on the administrative area can affect heavily the monthly
+  split of the population; the total figures remain evidently the same, but the
+  differences calculated using different sources of data are not particularly
+  significant and, considering the level precision that can be reasonably be
+  achieved for estimates performed at a global scale, seems to be acceptable.<br />In
+  the next figures is possible to see that the overall distribution of
+  precipitation is extremely similar between the raster based calculation (on
+  the left) and the real time data provided as services by the World Bank
+  climate data application programming interface (on the right).<br />
+</p>
+<table
+  border="0"
+  cellpadding="0"
+  cellspacing="0"
+  class="MsoTableGrid"
+  style="border-collapse: collapse; border-style: none;"
+>
+  <tbody>
+    <tr>
+      <td style="padding: 0cm 5.4pt; width: 225.4pt;" valign="top" width="301">
+        <a
+          href="http://2.bp.blogspot.com/-8VYnZOQ-rlM/Va31zVCFt2I/AAAAAAAABfM/oOOcvgr6zsI/s1600/image037.jpg"
+          ><img
+            border="0"
+            src="http://2.bp.blogspot.com/-8VYnZOQ-rlM/Va31zVCFt2I/AAAAAAAABfM/oOOcvgr6zsI/s1600/image037.jpg"
+        /></a>
+      </td>
+      <td style="padding: 0cm 5.4pt; width: 225.4pt;" valign="top" width="301">
+        <div style="break-after: avoid;">
+          <a
+            href="http://4.bp.blogspot.com/-17g7_cR4J8c/Va31zk5VRWI/AAAAAAAABfM/9tDgkkwkpp0/s1600/image038.png"
+            ><img
+              border="0"
+              height="216"
+              src="http://4.bp.blogspot.com/-17g7_cR4J8c/Va31zk5VRWI/AAAAAAAABfM/9tDgkkwkpp0/s1600/image038.png"
+              width="284"
+          /></a>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p></p>
+<div class="MsoCaption"><br /><span lang=""></span></div>
+<p>
+  <a
+    href="http://4.bp.blogspot.com/-aev6O0zcw7w/Va31zzjTpvI/AAAAAAAABfM/_k4Zflz2KVc/s1600/image039.jpg"
+    ><img
+      align="left"
+      border="0"
+      src="http://4.bp.blogspot.com/-aev6O0zcw7w/Va31zzjTpvI/AAAAAAAABfM/_k4Zflz2KVc/s1600/image039.jpg"
+      style="display: inline; float: left;" /></a
+  >
+      >The component which potentially seems to have the greatest influence over
+      the final calculation are the flood extent maps which could be affected by
+      numerous factors (e.g. lack of knowledge of embankments, inaccuracies of
+      the digital elevation model, inaccuracies in the hydraulic model,
+      etc…)
+</p>
+<p>
+  <font size="2"
+    ><span lang="" style="color: black; font-size: 12pt; line-height: 107%;"
+      ><font color="#666666"
+        ><font size="2"
+          >A boundary is always “disputable” and there is never 100% certainty
+          in the exact boundary of a floodplain because the input parameters to
+          the models used to determine the floodplain are uncertain and the
+          models themselves have some assumptions and uncertainty
+          incorporated</font
+        >.
+      </font></span
+    ></font
+  >
+</p>
+<p>
+  <span lang=""
+    >Often times the produced floodplain, seemingly contradict accepted
+    floodplain limits for a certain recurrence interval.
+  </span>
+</p>
+<table
+  align="left"
+  border="0"
+  cellpadding="0"
+  cellspacing="0"
+  class="MsoTableGrid"
+  style="border-collapse: collapse; border-style: none; margin-left: 6.75pt; margin-right: 6.75pt; width: 491px;"
+>
+  <tbody>
+    <tr style="height: 30pt;">
+      <td
+        style="border-color: currentcolor; border-style: none solid solid none; border-width: medium 1pt 1pt medium; height: 30pt; padding: 0cm 5.4pt; text-align: center; width: 3cm;"
+        valign="top"
+        width="113"
+      >
+        <div style="line-height: normal;">
+          <span lang="" style="color: #00b0f0;">Return </span>
+        </div>
+        <div style="line-height: normal;">
+          <span lang="" style="color: #00b0f0;">Period</span>
+        </div>
+      </td>
+      <td
+        style="border-color: currentcolor; border-style: none solid solid none; border-width: medium 1pt 1pt medium; height: 30pt; padding: 0cm 5.4pt; text-align: center; width: 92.15pt;"
+        valign="top"
+        width="123"
+      >
+        <div style="line-height: normal;">
+          <span lang="" style="color: #00b0f0;">Pop affected per each RP</span>
+        </div>
+      </td>
+      <td
+        style="border-color: currentcolor; border-style: none solid solid none; border-width: medium 1pt 1pt medium; height: 30pt; padding: 0cm 5.4pt; text-align: center; width: 106.3pt;"
+        valign="top"
+        width="142"
+      >
+        <div style="line-height: normal;">
+          <span lang="" style="color: #00b0f0;">Cumulated Population</span>
+        </div>
+      </td>
+      <td
+        style="border-color: currentcolor; border-style: none; border-width: medium; height: 30pt; padding: 0cm 5.4pt; text-align: center; width: 85.1pt;"
+        valign="top"
+        width="113"
+      >
+        <div style="line-height: normal;">
+          <span lang="" style="color: #00b0f0;">Percent Increase</span>
+        </div>
+      </td>
+    </tr>
+    <tr align="center" style="height: 15pt;">
+      <td
+        style="border-color: currentcolor; border-style: none solid solid none; border-width: medium 1pt 1pt medium; height: 15pt; padding: 0cm 5.4pt; width: 3cm;"
+        valign="top"
+        width="113"
+      >
+        <div style="line-height: normal;">
+          <span lang="" style="color: black;">25</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-color: currentcolor; border-style: none solid solid none; border-width: medium 1pt 1pt medium; height: 15pt; padding: 0cm 5.4pt; width: 92.15pt;"
+        valign="top"
+        width="123"
+      >
+        <div style="line-height: normal;">
+          <span lang="" style="color: black;">662497.78</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-color: currentcolor; border-style: none solid solid none; border-width: medium 1pt 1pt medium; height: 15pt; padding: 0cm 5.4pt; width: 106.3pt;"
+        valign="top"
+        width="142"
+      >
+        <div style="line-height: normal;">
+          <span lang="" style="color: black;">662497.78</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-color: currentcolor; border-style: none; border-width: medium; height: 15pt; padding: 0cm 5.4pt; width: 85.1pt;"
+        valign="top"
+        width="113"
+      >
+        <div style="line-height: normal;">
+          <span lang="" style="color: black;">0.0%</span>
+        </div>
+      </td>
+    </tr>
+    <tr align="center" style="height: 15pt;">
+      <td
+        style="border-color: currentcolor; border-style: none solid solid none; border-width: medium 1pt 1pt medium; height: 15pt; padding: 0cm 5.4pt; width: 3cm;"
+        valign="top"
+        width="113"
+      >
+        <div style="line-height: normal;">
+          <span lang="" style="color: black;">50</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-color: currentcolor; border-style: none solid solid none; border-width: medium 1pt 1pt medium; height: 15pt; padding: 0cm 5.4pt; width: 92.15pt;"
+        valign="top"
+        width="123"
+      >
+        <div style="line-height: normal;">
+          <span lang="" style="color: black;">74338.64</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-color: currentcolor; border-style: none solid solid none; border-width: medium 1pt 1pt medium; height: 15pt; padding: 0cm 5.4pt; width: 106.3pt;"
+        valign="top"
+        width="142"
+      >
+        <div style="line-height: normal;">
+          <span lang="" style="color: black;">736836.42</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-color: currentcolor; border-style: none; border-width: medium; height: 15pt; padding: 0cm 5.4pt; width: 85.1pt;"
+        valign="top"
+        width="113"
+      >
+        <div style="line-height: normal;">
+          <span lang="" style="color: black;">8.9%</span>
+        </div>
+      </td>
+    </tr>
+    <tr align="center" style="height: 15pt;">
+      <td
+        style="border-color: currentcolor; border-style: none solid solid none; border-width: medium 1pt 1pt medium; height: 15pt; padding: 0cm 5.4pt; width: 3cm;"
+        valign="top"
+        width="113"
+      >
+        <div style="line-height: normal;">
+          <span lang="" style="color: black;">100</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-color: currentcolor; border-style: none solid solid none; border-width: medium 1pt 1pt medium; height: 15pt; padding: 0cm 5.4pt; width: 92.15pt;"
+        valign="top"
+        width="123"
+      >
+        <div style="line-height: normal;">
+          <span lang="" style="color: black;">69165.72</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-color: currentcolor; border-style: none solid solid none; border-width: medium 1pt 1pt medium; height: 15pt; padding: 0cm 5.4pt; width: 106.3pt;"
+        valign="top"
+        width="142"
+      >
+        <div style="line-height: normal;">
+          <span lang="" style="color: black;">806002.15</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-color: currentcolor; border-style: none; border-width: medium; height: 15pt; padding: 0cm 5.4pt; width: 85.1pt;"
+        valign="top"
+        width="113"
+      >
+        <div style="line-height: normal;">
+          <span lang="" style="color: black;">10.7%</span>
+        </div>
+      </td>
+    </tr>
+    <tr align="center" style="height: 15pt;">
+      <td
+        style="border-color: currentcolor; border-style: none solid solid none; border-width: medium 1pt 1pt medium; height: 15pt; padding: 0cm 5.4pt; width: 3cm;"
+        valign="top"
+        width="113"
+      >
+        <div style="line-height: normal;">
+          <span lang="" style="color: black;">200</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-color: currentcolor; border-style: none solid solid none; border-width: medium 1pt 1pt medium; height: 15pt; padding: 0cm 5.4pt; width: 92.15pt;"
+        valign="top"
+        width="123"
+      >
+        <div style="line-height: normal;">
+          <span lang="" style="color: black;">79145.58</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-color: currentcolor; border-style: none solid solid none; border-width: medium 1pt 1pt medium; height: 15pt; padding: 0cm 5.4pt; width: 106.3pt;"
+        valign="top"
+        width="142"
+      >
+        <div style="line-height: normal;">
+          <span lang="" style="color: black;">885147.73</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-color: currentcolor; border-style: none; border-width: medium; height: 15pt; padding: 0cm 5.4pt; width: 85.1pt;"
+        valign="top"
+        width="113"
+      >
+        <div style="line-height: normal;">
+          <span lang="" style="color: black;">10.2%</span>
+        </div>
+      </td>
+    </tr>
+    <tr align="center" style="height: 15pt;">
+      <td
+        style="border-color: currentcolor; border-style: none; border-width: medium; height: 15pt; padding: 0cm 5.4pt; text-align: center; width: 3cm;"
+        valign="top"
+        width="113"
+      >
+        <div style="line-height: normal;">
+          <span lang="" style="color: black;">1000</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-color: currentcolor; border-style: none; border-width: medium; height: 15pt; padding: 0cm 5.4pt; text-align: center; width: 92.15pt;"
+        valign="top"
+        width="123"
+      >
+        <div style="line-height: normal;">
+          <span lang="" style="color: black;">186301.29</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-color: currentcolor; border-style: none; border-width: medium; height: 15pt; padding: 0cm 5.4pt; text-align: center; width: 106.3pt;"
+        valign="top"
+        width="142"
+      >
+        <div style="line-height: normal;">
+          <span lang="" style="color: black;">1071449.02</span>
+        </div>
+      </td>
+      <td
+        nowrap=""
+        style="border-color: currentcolor; border-style: none; border-width: medium; height: 15pt; padding: 0cm 5.4pt; text-align: center; width: 85.1pt;"
+        valign="top"
+        width="113"
+      >
+        <div style="line-height: normal;">
+          <span lang="" style="color: black;">4.8%</span>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h3>&nbsp;</h3>
+<h3>
+  <span style="font-weight: normal;"
+    ><span lang=""
+      >Application of methodology to the Thane District (India)</span
+    ></span
+  >
+</h3>
+<p align="left">
+  <a
+    href="http://1.bp.blogspot.com/-6HkKV0O1UaI/Va310b5iJbI/AAAAAAAABfM/H1sCkuVwdmo/s1600/image041.jpg"
+    ><img
+      border="0"
+      src="http://1.bp.blogspot.com/-6HkKV0O1UaI/Va310b5iJbI/AAAAAAAABfM/H1sCkuVwdmo/s1600/image041.jpg"
+      style="display: block; float: none; margin-left: auto; margin-right: auto;"
+  /></a>
+</p>
+<p align="left">
+  <span lang="">Thane District is a district in northern Maharashtra state in western
+    India. At the 2011 Census it was the most populated district in the nation,
+    with 11,060,148 inhabitants; however, in 2014 the district was split into
+    two with the creation of a new Palghar district, leaving the reduced Thane
+    district with a 2011 Census population of 8,070,032.</span
+  ><br />The headquarters of the district is the city of Thane. Other major
+  cities in the district are Kalyan-Dombivali, Mira-Bhayander, Bhiwandi,
+  Ulhasnagar, Ambarnath, Kulgaon-Badlapur, Shahapur and Navi Mumbai. This is the
+  third-most industrialised district in Maharashtra.<br />Thane is a city in
+  Maharashtra, India, at the head of the Thane Creek. Thane covers an area of
+  147 km2 and has a population of more than 1.8 million within its municipal
+  limits, according to the 2011 census.<br />Estimated affected people<br />
+</p>
+<div align="center">
+  <table
+    border="0"
+    cellpadding="0"
+    cellspacing="0"
+    class="GridTable4Accent1"
+    style="border-collapse: collapse; border-style: none; width: 350px;"
+  >
+    <tbody>
+      <tr style="height: 15pt;">
+        <td
+          nowrap=""
+          style="border-color: rgb(91, 155, 213) rgb(0, 176, 240) rgb(0, 176, 240) rgb(91, 155, 213); border-style: solid; border-width: 1pt; height: 15pt; padding: 0cm 5.4pt; width: 51pt;"
+          valign="top"
+          width="68"
+        >
+          <p align="left">
+            <a href="https://www.blogger.com/null" name="RANGE!A1:B6"
+              ><b><span lang="" style="color: #00b0f0;">RP</span></b></a
+            >
+          </p>
+        </td>
+        <td
+          nowrap=""
+          style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: solid solid solid none; border-top: 1pt solid rgb(91, 155, 213); height: 15pt; padding: 0cm 5.4pt; width: 58.2pt;"
+          valign="top"
+          width="78"
+        >
+          <p align="left">
+            <b><span lang="" style="color: #00b0f0;">Pop</span></b>
+          </p>
+        </td>
+        <td
+          nowrap=""
+          style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: solid solid solid none; border-top: 1pt solid rgb(91, 155, 213); height: 15pt; padding: 0cm 5.4pt; width: 96.35pt;"
+          valign="top"
+          width="128"
+        >
+          <p align="left">
+            <b><span lang="" style="color: #00b0f0;">Cumulated Pop</span></b>
+          </p>
+        </td>
+        <td
+          nowrap=""
+          style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid white; border-style: solid solid solid none; border-top: 1pt solid rgb(91, 155, 213); height: 15pt; padding: 0cm 5.4pt; width: 2cm;"
+          valign="top"
+          width="76"
+        >
+          <p align="left">
+            <b><span lang="" style="color: #00b0f0;">% Pop</span></b>
+          </p>
+        </td>
+      </tr>
+      <tr style="height: 15pt;">
+        <td
+          nowrap=""
+          style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 51pt;"
+          valign="top"
+          width="68"
+        >
+          <p align="left">
+            <b><span lang="" style="color: #00b0f0;">25</span></b>
+          </p>
+        </td>
+        <td
+          nowrap=""
+          style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 58.2pt;"
+          valign="top"
+          width="78"
+        >
+          <div align="left" style="margin-bottom: 6pt; text-align: center;">
+            <span lang="" style="color: black;">67438</span>
+          </div>
+        </td>
+        <td
+          nowrap=""
+          style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 96.35pt;"
+          width="128"
+        >
+          <div
+            align="left"
+            style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+          >
+            <span lang="" style="color: black;">67438</span>
+          </div>
+        </td>
+        <td
+          nowrap=""
+          style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid white; border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 2cm;"
+          width="76"
+        >
+          <div
+            align="left"
+            style="line-height: normal; margin-bottom: 0cm; text-align: center;"
+          >
+            <span lang="" style="color: black;">0.61%</span>
+          </div>
+        </td>
+      </tr>
+      <tr style="height: 15pt;">
+        <td
+          nowrap=""
+          style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 51pt;"
+          valign="top"
+          width="68"
+        >
+          <p align="left">
+            <b><span lang="" style="color: #00b0f0;">50</span></b>
+          </p>
+        </td>
+        <td
+          nowrap=""
+          style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 58.2pt;"
+          valign="top"
+          width="78"
+        >
+          <div align="left" style="margin-bottom: 6pt; text-align: center;">
+            <span lang="" style="color: black;">49669</span>
+          </div>
+        </td>
+        <td
+          nowrap=""
+          style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 96.35pt;"
+          width="128"
+        >
+          <p align="left"><span lang="" style="color: black;">117107</span></p>
+        </td>
+        <td
+          nowrap=""
+          style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid white; border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 2cm;"
+          width="76"
+        >
+          <p align="left"><span lang="" style="color: black;">1.06%</span></p>
+        </td>
+      </tr>
+      <tr style="height: 15pt;">
+        <td
+          nowrap=""
+          style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 51pt;"
+          valign="top"
+          width="68"
+        >
+          <p align="left">
+            <b><span lang="" style="color: #00b0f0;">100</span></b>
+          </p>
+        </td>
+        <td
+          nowrap=""
+          style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 58.2pt;"
+          valign="top"
+          width="78"
+        >
+          <div align="left" style="margin-bottom: 6pt; text-align: center;">
+            <span lang="" style="color: black;">1305300</span>
+          </div>
+        </td>
+        <td
+          nowrap=""
+          style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 96.35pt;"
+          width="128"
+        >
+          <p align="left"><span lang="" style="color: black;">1422407</span></p>
+        </td>
+        <td
+          nowrap=""
+          style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid white; border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 2cm;"
+          width="76"
+        >
+          <p align="left"><span lang="" style="color: black;">12.86%</span></p>
+        </td>
+      </tr>
+      <tr style="height: 15pt;">
+        <td
+          nowrap=""
+          style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 51pt;"
+          valign="top"
+          width="68"
+        >
+          <p align="left">
+            <b><span lang="" style="color: #00b0f0;">200</span></b>
+          </p>
+        </td>
+        <td
+          nowrap=""
+          style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 58.2pt;"
+          valign="top"
+          width="78"
+        >
+          <div align="left" style="margin-bottom: 6pt; text-align: center;">
+            <span lang="" style="color: black;">2036170</span>
+          </div>
+        </td>
+        <td
+          nowrap=""
+          style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 96.35pt;"
+          width="128"
+        >
+          <p align="left"><span lang="" style="color: black;">3458577</span></p>
+        </td>
+        <td
+          nowrap=""
+          style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid white; border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 2cm;"
+          width="76"
+        >
+          <p align="left"><span lang="" style="color: black;">31.27%</span></p>
+        </td>
+      </tr>
+      <tr style="height: 15pt;">
+        <td
+          nowrap=""
+          style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 51pt;"
+          valign="top"
+          width="68"
+        >
+          <p align="left">
+            <b><span lang="" style="color: #00b0f0;">500</span></b>
+          </p>
+        </td>
+        <td
+          nowrap=""
+          style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 58.2pt;"
+          valign="top"
+          width="78"
+        >
+          <div align="left" style="margin-bottom: 6pt; text-align: center;">
+            <span lang="" style="color: black;">176732</span>
+          </div>
+        </td>
+        <td
+          nowrap=""
+          style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid rgb(0, 176, 240); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 96.35pt;"
+          width="128"
+        >
+          <p align="left"><span lang="" style="color: black;">3635309</span></p>
+        </td>
+        <td
+          nowrap=""
+          style="border-bottom: 1pt solid rgb(0, 176, 240); border-right: 1pt solid white; border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 2cm;"
+          width="76"
+        >
+          <p align="left"><span lang="" style="color: black;">32.87%</span></p>
+        </td>
+      </tr>
+      <tr style="height: 15pt;">
+        <td
+          nowrap=""
+          style="border-bottom-style: none; border-left-style: none; border-right-color: rgb(0, 176, 240); border-right-width: 1pt; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 51pt;"
+          valign="top"
+          width="68"
+        >
+          <p align="left">
+            <b><span lang="" style="color: #00b0f0;">1000</span></b>
+          </p>
+        </td>
+        <td
+          nowrap=""
+          style="border-bottom-style: none; border-left-style: none; border-right-color: rgb(0, 176, 240); border-right-width: 1pt; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 58.2pt;"
+          valign="top"
+          width="78"
+        >
+          <div align="left" style="margin-bottom: 6pt; text-align: center;">
+            <span lang="" style="color: black;">57327</span>
+          </div>
+        </td>
+        <td
+          nowrap=""
+          style="border-bottom-style: none; border-left-style: none; border-right-color: rgb(0, 176, 240); border-right-width: 1pt; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 96.35pt;"
+          width="128"
+        >
+          <p align="left"><span lang="" style="color: black;">3692636</span></p>
+        </td>
+        <td
+          nowrap=""
+          style="border-bottom-style: none; border-left-style: none; border-right-color: white; border-right-width: 1pt; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 2cm;"
+          width="76"
+        >
+          <p align="left"><span lang="" style="color: black;">33.39%</span></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div align="left">&nbsp;</div>
+<div align="left">
+  <table
+    align="left"
+    border="1"
+    cellpadding="0"
+    cellspacing="0"
+    class="MsoTableGrid"
+    style="border-collapse: collapse; border-style: none; margin-left: 5.65pt;"
+  >
+    <tbody>
+      <tr>
+        <td
+          style="border-color: currentcolor; border-style: solid; border-width: 1pt; padding: 0cm 5.4pt; width: 231.4pt;"
+          valign="top"
+          width="309"
+        >
+          <div class="Default" style="line-height: normal; margin-bottom: 6pt;">
+            <a
+              href="http://3.bp.blogspot.com/-S32WrCqAmJM/Va310j3Yq2I/AAAAAAAABfM/iYeSvdoYtfE/s1600/image042.jpg"
+              ><img
+                border="0"
+                src="http://3.bp.blogspot.com/-S32WrCqAmJM/Va310j3Yq2I/AAAAAAAABfM/iYeSvdoYtfE/s1600/image042.jpg"
+            /></a>
+          </div>
+        </td>
+        <td
+          style="border-color: currentcolor; border-style: solid; border-width: 1pt; padding: 0cm 5.4pt; width: 232.8pt;"
+          valign="top"
+          width="310"
+        >
+          <div
+            class="Default"
+            style="break-after: avoid; line-height: normal; margin-bottom: 6pt;"
+          >
+            <a
+              href="http://1.bp.blogspot.com/-WPCxASUZaEQ/Va311HOHHwI/AAAAAAAABfM/DFAG3it3tpQ/s1600/image043.jpg"
+              ><img
+                border="0"
+                src="http://1.bp.blogspot.com/-WPCxASUZaEQ/Va311HOHHwI/AAAAAAAABfM/DFAG3it3tpQ/s1600/image043.jpg"
+            /></a>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<h3>Vulnerability</h3>
+The people at risk of flooding need to be further screened assuming that not all
+people are affected to the same degree by natural hazards due to endogenous
+factors, such as water depth and velocity, as well as exogenous components such
+as the different level of resilience of different social classes and different
+ages.<br />Water depth and the velocity of water are important parameters, as
+possibilities for shelter decrease with increasing water depth with low-lying
+and densely populated areas, such as reclaimed areas or polders, will be most at
+risk. On the other hand, the global scale of our analysis and the lack of
+reliable data on dwelling at world level, reduce the actual possibility of using
+the information on the depth.<br />The vulnerability assessment is therefore
+entirely based on socio-economic and land-use derivative factors, as
+successfully experimented in the past (Peduzzi et al.) where five vulnerability
+parameters where used, namely:<br />
+<div class="MsoListParagraphCxSpFirst" style="text-indent: -18pt;">
+  <span lang="" style='font-family: "symbol";'
+    >·<span style='font: 7pt "times new roman";'
+      >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </span></span
+  ><span lang="">GDP</span>
+</div>
+<span lang="" style='font-family: "symbol";'
+  >·<span style='font: 7pt "times new roman";'
+    >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span></span
+><span lang="">purchasing power parity per capita, </span><br /><span
+  lang=""
+  style='font-family: "symbol";'
+  >·<span style='font: 7pt "times new roman";'
+    >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span></span
+><span lang="">modified percentage of arable land, </span><br /><span
+  lang=""
+  style='font-family: "symbol";'
+  >·<span style='font: 7pt "times new roman";'
+    >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span></span
+><span lang="">percentage of urban growth, </span><br />
+<div class="MsoListParagraphCxSpLast" style="text-indent: -18pt;">
+  <span lang="" style='font-family: "symbol";'
+    >·<span style='font: 7pt "times new roman";'
+      >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </span></span
+  ><span lang=""
+    >percentage of country forest coverage, transformed value of the percentage
+    of the country dedicated to Crop land)</span
+  >
+</div>
+The above factors can be broadly divided in two main areas, with the last three
+items describing the intrinsic <b>area vulnerability</b> (AV) and the first two
+the <b>people vulnerability</b> (PV) in terms of copying capacity and economic
+capabilities.<br /><br />In SPARC, a similar approach is used with the
+socio-economic parameters (AP) provided by Vulnerability Analysis and Mapping
+unit and detailed in the following table.<br />
+<div align="center">
+  <table
+    border="0"
+    cellpadding="0"
+    cellspacing="0"
+    style="border-collapse: collapse; width: 464px;"
+    table=""
+  >
+    <tbody>
+      <tr style="height: 15pt;">
+        <td
+          style="border-bottom: 1pt solid rgb(0, 136, 255); border-right: 1pt solid rgb(0, 136, 255); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 178.2pt;"
+          width="238"
+        >
+          <span lang="" style="color: #00b0f0;">Dataset Name</span>
+        </td>
+        <td width="113"><span lang="" style="color: #00b0f0;">Source</span></td>
+        <td
+          style="border-bottom-color: rgb(0, 136, 255); border-bottom-width: 1pt; border-left-style: none; border-right-style: none; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 3cm;"
+          width="113"
+        >
+          <span lang="" style="color: #00b0f0;">Weight</span>
+        </td>
+      </tr>
+      <tr style="height: 15pt;">
+        <td
+          style="border-bottom: 1pt solid rgb(0, 136, 255); border-right: 1pt solid rgb(0, 136, 255); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 178.2pt;"
+          width="238"
+        >
+          <span
+            lang=""
+            style="color: black; font-size: 10pt; line-height: 107%;"
+            >Food Consumption Score 1</span
+          >
+        </td>
+        <td width="113">
+          <span
+            lang=""
+            style="color: black; font-size: 10pt; line-height: 107%;"
+            >WFP</span
+          >
+        </td>
+        <td
+          style="border-bottom-color: rgb(0, 136, 255); border-bottom-width: 1pt; border-left-style: none; border-right-style: none; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 3cm;"
+          width="113"
+        >
+          <span
+            lang=""
+            style="color: black; font-size: 10pt; line-height: 107%;"
+            >Most recent</span
+          >
+        </td>
+      </tr>
+      <tr style="height: 15pt;">
+        <td
+          style="border-bottom: 1pt solid rgb(0, 136, 255); border-right: 1pt solid rgb(0, 136, 255); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 178.2pt;"
+          width="238"
+        >
+          <span
+            lang=""
+            style="color: black; font-size: 10pt; line-height: 107%;"
+            >Food Consumption Score 2</span
+          >
+        </td>
+        <td width="113">
+          <span
+            lang=""
+            style="color: black; font-size: 10pt; line-height: 107%;"
+            >WFP</span
+          >
+        </td>
+        <td
+          style="border-bottom-color: rgb(0, 136, 255); border-bottom-width: 1pt; border-left-style: none; border-right-style: none; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 3cm;"
+          width="113"
+        >
+          <span
+            lang=""
+            style="color: black; font-size: 10pt; line-height: 107%;"
+            >5 year trend</span
+          >
+        </td>
+      </tr>
+      <tr style="height: 15pt;">
+        <td
+          style="border-bottom: 1pt solid rgb(0, 136, 255); border-right: 1pt solid rgb(0, 136, 255); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 178.2pt;"
+          width="238"
+        >
+          <span
+            lang=""
+            style="color: black; font-size: 10pt; line-height: 107%;"
+            >Coping Strategy Index
+          </span>
+        </td>
+        <td width="113">
+          <span
+            lang=""
+            style="color: black; font-size: 10pt; line-height: 107%;"
+            >WFP</span
+          >
+        </td>
+        <td
+          style="border-bottom-color: rgb(0, 136, 255); border-bottom-width: 1pt; border-left-style: none; border-right-style: none; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 3cm;"
+          width="113"
+        >
+          <span
+            lang=""
+            style="color: black; font-size: 10pt; line-height: 107%;"
+            >Most recent</span
+          >
+        </td>
+      </tr>
+      <tr style="height: 15pt;">
+        <td
+          style="border-bottom: 1pt solid rgb(0, 136, 255); border-right: 1pt solid rgb(0, 136, 255); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 178.2pt;"
+          width="238"
+        >
+          <span
+            lang=""
+            style="color: black; font-size: 10pt; line-height: 107%;"
+            >Income Sources</span
+          >
+        </td>
+        <td width="113">
+          <span
+            lang=""
+            style="color: black; font-size: 10pt; line-height: 107%;"
+            >WFP</span
+          >
+        </td>
+        <td
+          style="border-bottom-color: rgb(0, 136, 255); border-bottom-width: 1pt; border-left-style: none; border-right-style: none; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 3cm;"
+          width="113"
+        >
+          <span
+            lang=""
+            style="color: black; font-size: 10pt; line-height: 107%;"
+            >Most recent</span
+          >
+        </td>
+      </tr>
+      <tr style="height: 15pt;">
+        <td
+          style="border-bottom: 1pt solid rgb(0, 136, 255); border-right: 1pt solid rgb(0, 136, 255); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 178.2pt;"
+          width="238"
+        >
+          <span
+            lang=""
+            style="color: black; font-size: 10pt; line-height: 107%;"
+            >Agricultural Components</span
+          >
+        </td>
+        <td width="113">
+          <span
+            lang=""
+            style="color: black; font-size: 10pt; line-height: 107%;"
+            >WFP</span
+          >
+        </td>
+        <td
+          style="border-bottom-color: rgb(0, 136, 255); border-bottom-width: 1pt; border-left-style: none; border-right-style: none; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 3cm;"
+          width="113"
+        >
+          <span
+            lang=""
+            style="color: black; font-size: 10pt; line-height: 107%;"
+            >Most recent</span
+          >
+        </td>
+      </tr>
+      <tr style="height: 15pt;">
+        <td
+          style="border-bottom: 1pt solid rgb(0, 136, 255); border-right: 1pt solid rgb(0, 136, 255); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 178.2pt;"
+          width="238"
+        >
+          <span
+            lang=""
+            style="color: black; font-size: 10pt; line-height: 107%;"
+            >Undernourishment</span
+          >
+        </td>
+        <td width="113">
+          <span
+            lang=""
+            style="color: black; font-size: 10pt; line-height: 107%;"
+            >FAO</span
+          >
+        </td>
+        <td
+          style="border-bottom-color: rgb(0, 136, 255); border-bottom-width: 1pt; border-left-style: none; border-right-style: none; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 3cm;"
+          width="113"
+        >
+          <span
+            lang=""
+            style="color: black; font-size: 10pt; line-height: 107%;"
+            >5 year average</span
+          >
+        </td>
+      </tr>
+      <tr style="height: 15pt;">
+        <td
+          style="border-bottom: 1pt solid rgb(0, 136, 255); border-right: 1pt solid rgb(0, 136, 255); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 178.2pt;"
+          width="238"
+        >
+          <span
+            lang=""
+            style="color: black; font-size: 10pt; line-height: 107%;"
+            >Poverty Line</span
+          >
+        </td>
+        <td width="113">
+          <span
+            lang=""
+            style="color: black; font-size: 10pt; line-height: 107%;"
+            >WB</span
+          >
+        </td>
+        <td
+          style="border-bottom-color: rgb(0, 136, 255); border-bottom-width: 1pt; border-left-style: none; border-right-style: none; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 3cm;"
+          width="113"
+        >
+          <span
+            lang=""
+            style="color: black; font-size: 10pt; line-height: 107%;"
+            >Most recent</span
+          >
+        </td>
+      </tr>
+      <tr style="height: 15pt;">
+        <td
+          style="border-bottom-style: none; border-left-style: none; border-right-color: rgb(0, 136, 255); border-right-width: 1pt; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 178.2pt;"
+          width="238"
+        >
+          <span
+            lang=""
+            style="color: black; font-size: 10pt; line-height: 107%;"
+            >Seasonality Indicator</span
+          >
+        </td>
+        <td
+          style="border-bottom-style: none; border-left-style: none; border-right-color: rgb(0, 136, 255); border-right-width: 1pt; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 3cm;"
+          width="113"
+        >
+          <span
+            lang=""
+            style="color: black; font-size: 10pt; line-height: 107%;"
+            >WFP</span
+          >
+        </td>
+        <td
+          style="border-style: none; height: 15pt; padding: 0cm 5.4pt; width: 3cm;"
+          width="113"
+        >
+          <div style="break-after: avoid;">
+            <span
+              lang=""
+              style="color: black; font-size: 10pt; line-height: 107%;"
+              >Static</span
+            >
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="MsoCaption" style="margin-left: 36pt; text-indent: 36pt;">
+  &nbsp;
+</div>
+<span class="hps"
+  ><span lang="EN">The locational vulnerability<b>(AV) , </b></span></span
+><span lang="" style="color: black; font-size: 12pt; line-height: 107%;"
+  >is based</span
+><span class="hps"><span lang=""> </span></span
+><span lang=""
+  >on the so called “contextual layers”, providing trends on land use changes
+  and subsequent degenerative tendencies such as the reduction of agricultural
+  land for food production, depletion of ecological stock such as forest cover
+  in favour of impervious areas, high rates of soil erosion propensity
+  etc…</span
+><br />A more comprehensive list is presented below.<br />
+<div align="center">
+  <table
+    border="0"
+    cellpadding="0"
+    cellspacing="0"
+    style="border-collapse: collapse; width: 464px;"
+    table=""
+  >
+    <tbody>
+      <tr style="height: 15pt;">
+        <td
+          style="border-bottom: 1pt solid rgb(0, 136, 255); border-right: 1pt solid rgb(0, 136, 255); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 178.2pt;"
+          width="238"
+        >
+          <span lang="" style="color: #00b0f0;">Dataset</span>
+        </td>
+        <td width="113"><span lang="" style="color: #00b0f0;">Source</span></td>
+        <td
+          style="border-bottom-color: rgb(0, 136, 255); border-bottom-width: 1pt; border-left-style: none; border-right-style: none; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 3cm;"
+          width="113"
+        >
+          <span lang="" style="color: #00b0f0;">Weight</span>
+        </td>
+      </tr>
+      <tr style="height: 15pt;">
+        <td
+          style="border-bottom: 1pt solid rgb(0, 136, 255); border-right: 1pt solid rgb(0, 136, 255); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 178.2pt;"
+          width="238"
+        >
+          <div style="line-height: normal; margin-bottom: 0cm;">
+            <span lang="" style="color: black; font-size: 10pt;"
+              >Erosion (current eroded areas)</span
+            >
+          </div>
+        </td>
+        <td width="113">
+          <div style="line-height: normal; margin-bottom: 0cm;">
+            <span lang="" style="color: black; font-size: 10pt;">WFP/DLR</span>
+          </div>
+        </td>
+        <td
+          style="border-bottom-color: rgb(0, 136, 255); border-bottom-width: 1pt; border-left-style: none; border-right-style: none; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 3cm;"
+          width="113"
+        >
+          <div style="line-height: normal; margin-bottom: 0cm;"></div>
+          <br />
+        </td>
+      </tr>
+      <tr style="height: 15pt;">
+        <td
+          style="border-bottom: 1pt solid rgb(0, 136, 255); border-right: 1pt solid rgb(0, 136, 255); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 178.2pt;"
+          width="238"
+        >
+          <div style="line-height: normal; margin-bottom: 0cm;">
+            <span lang="" style="color: black; font-size: 10pt;"
+              >Erodible areas (areas prone to erosion)</span
+            >
+          </div>
+        </td>
+        <td width="113">
+          <div style="line-height: normal; margin-bottom: 0cm;">
+            <span lang="" style="color: black; font-size: 10pt;">WFP/DLR</span>
+          </div>
+        </td>
+        <td
+          style="border-bottom-color: rgb(0, 136, 255); border-bottom-width: 1pt; border-left-style: none; border-right-style: none; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 3cm;"
+          width="113"
+        >
+          <div style="line-height: normal; margin-bottom: 0cm;"></div>
+          <br />
+        </td>
+      </tr>
+      <tr style="height: 15pt;">
+        <td
+          style="border-bottom: 1pt solid rgb(0, 136, 255); border-right: 1pt solid rgb(0, 136, 255); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 178.2pt;"
+          width="238"
+        >
+          <div style="line-height: normal; margin-bottom: 0cm;">
+            <span lang="" style="color: black; font-size: 10pt;"
+              >Deforestation rates</span
+            >
+          </div>
+        </td>
+        <td width="113">
+          <div style="line-height: normal; margin-bottom: 0cm;">
+            <span lang="" style="color: black; font-size: 10pt;">WFP/DLR</span>
+          </div>
+        </td>
+        <td
+          style="border-bottom-color: rgb(0, 136, 255); border-bottom-width: 1pt; border-left-style: none; border-right-style: none; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 3cm;"
+          width="113"
+        >
+          <div style="line-height: normal; margin-bottom: 0cm;"></div>
+          <br />
+        </td>
+      </tr>
+      <tr style="height: 15pt;">
+        <td
+          style="border-bottom: 1pt solid rgb(0, 136, 255); border-right: 1pt solid rgb(0, 136, 255); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 178.2pt;"
+          width="238"
+        >
+          <div style="line-height: normal; margin-bottom: 0cm;">
+            <span lang="" style="color: black; font-size: 10pt;"
+              >Desertification
+            </span>
+          </div>
+        </td>
+        <td width="113">
+          <div style="line-height: normal; margin-bottom: 0cm;">
+            <span lang="" style="color: black; font-size: 10pt;">WFP/DLR</span>
+          </div>
+        </td>
+        <td
+          style="border-bottom-color: rgb(0, 136, 255); border-bottom-width: 1pt; border-left-style: none; border-right-style: none; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 3cm;"
+          width="113"
+        >
+          <div style="line-height: normal; margin-bottom: 0cm;"></div>
+          <br />
+        </td>
+      </tr>
+      <tr style="height: 15pt;">
+        <td
+          style="border-bottom: 1pt solid rgb(0, 136, 255); border-right: 1pt solid rgb(0, 136, 255); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 178.2pt;"
+          width="238"
+        >
+          <div style="line-height: normal; margin-bottom: 0cm;">
+            <span lang="" style="color: black; font-size: 10pt;"
+              >Land cover change</span
+            >
+          </div>
+        </td>
+        <td width="113">
+          <div style="line-height: normal; margin-bottom: 0cm;">
+            <span lang="" style="color: black; font-size: 10pt;">WFP/DLR</span>
+          </div>
+        </td>
+        <td
+          style="border-bottom-color: rgb(0, 136, 255); border-bottom-width: 1pt; border-left-style: none; border-right-style: none; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 3cm;"
+          width="113"
+        >
+          <div style="line-height: normal; margin-bottom: 0cm;"></div>
+          <br />
+        </td>
+      </tr>
+      <tr style="height: 15pt;">
+        <td
+          style="border-bottom: 1pt solid rgb(0, 136, 255); border-right: 1pt solid rgb(0, 136, 255); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 178.2pt;"
+          width="238"
+        >
+          <div style="line-height: normal; margin-bottom: 0cm;">
+            <span lang="" style="color: black; font-size: 10pt;"
+              >Aggregated Land Degradation Index</span
+            >
+          </div>
+        </td>
+        <td width="113">
+          <div style="line-height: normal; margin-bottom: 0cm;">
+            <span lang="" style="color: black; font-size: 10pt;">WFP/DLR</span>
+          </div>
+        </td>
+        <td
+          style="border-bottom-color: rgb(0, 136, 255); border-bottom-width: 1pt; border-left-style: none; border-right-style: none; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 3cm;"
+          width="113"
+        >
+          <div style="line-height: normal; margin-bottom: 0cm;"></div>
+          <br />
+        </td>
+      </tr>
+      <tr style="height: 15pt;">
+        <td
+          style="border-bottom: 1pt solid rgb(0, 136, 255); border-right: 1pt solid rgb(0, 136, 255); border-style: none solid solid none; height: 15pt; padding: 0cm 5.4pt; width: 178.2pt;"
+          width="238"
+        >
+          <div style="line-height: normal; margin-bottom: 0cm;">
+            <span lang="" style="color: black; font-size: 10pt;"
+              >Conflict past intensity 1</span
+            >
+          </div>
+        </td>
+        <td width="113">
+          <div style="line-height: normal; margin-bottom: 0cm;">
+            <span lang="" style="color: black; font-size: 10pt;">UCL</span>
+          </div>
+        </td>
+        <td
+          style="border-bottom-color: rgb(0, 136, 255); border-bottom-width: 1pt; border-left-style: none; border-right-style: none; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 3cm;"
+          width="113"
+        >
+          <div style="line-height: normal; margin-bottom: 0cm;"></div>
+          <br />
+        </td>
+      </tr>
+      <tr style="height: 15pt;">
+        <td
+          style="border-bottom-style: none; border-left-style: none; border-right-color: rgb(0, 136, 255); border-right-width: 1pt; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 178.2pt;"
+          width="238"
+        >
+          <div style="line-height: normal; margin-bottom: 0cm;">
+            <span lang="" style="color: black; font-size: 10pt;"
+              >Conflict past intensity 2</span
+            >
+          </div>
+        </td>
+        <td
+          style="border-bottom-style: none; border-left-style: none; border-right-color: rgb(0, 136, 255); border-right-width: 1pt; border-top-style: none; height: 15pt; padding: 0cm 5.4pt; width: 3cm;"
+          width="113"
+        >
+          <div style="line-height: normal; margin-bottom: 0cm;">
+            <span lang="" style="color: black; font-size: 10pt;">UCL</span>
+          </div>
+        </td>
+        <td
+          style="border-style: none; height: 15pt; padding: 0cm 5.4pt; width: 3cm;"
+          width="113"
+        >
+          <div
+            style="break-after: avoid; line-height: normal; margin-bottom: 0cm;"
+          ></div>
+          <br />
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="MsoCaption" style="margin-left: 36pt; text-indent: 36pt;">
+  <span lang=""></span>
+</div>
+<p>
+  <span lang=""></span>The first comparison between actual flood events and
+  predicted values seems to be encouraging but more events must be controlled in
+  order to establish a confidence factor for the system.The following images
+  compares the calculation of SPARC with the flood event registered in Malawi in
+  January 2015. After applying the Food Consumption Score, although not
+  contextual layers which must still to be integrated into the calculations, the
+  number of people deemed likely to need food assistance where almost 850,000
+  for the 4% probability and a little more of one million for the 0,01%
+  probability versus 616,000 people estimated by in situ experts.
+</p>
+<table
+  border="0"
+  cellpadding="0"
+  cellspacing="0"
+  class="MsoTableGrid"
+  style="border-collapse: collapse; border-style: none;"
+>
+  <tbody>
+    <tr>
+      <td style="padding: 0cm 5.4pt; width: 9cm;" valign="top" width="340">
+        <table border="0" cellpadding="2" cellspacing="0" style="width: 697px;">
+          <tbody>
+            <tr>
+              <td valign="top" width="200">
+                <a
+                  href="http://2.bp.blogspot.com/-EkVfYgj9uFc/Va311msaxKI/AAAAAAAABfM/P93dp7ypmrY/s1600/image045.jpg"
+                  ><img
+                    border="0"
+                    src="http://2.bp.blogspot.com/-EkVfYgj9uFc/Va311msaxKI/AAAAAAAABfM/P93dp7ypmrY/s1600/image045.jpg"
+                    style="display: block; float: none; margin-left: auto; margin-right: auto;"
+                /></a>
+              </td>
+              <td valign="top" width="495">
+                <a
+                  href="http://4.bp.blogspot.com/-SXaV6gcLiZA/Va312ND8ewI/AAAAAAAABfM/ILLzPorQ3kw/s1600/image047.jpg"
+                  style="clear: left; float: left; margin-bottom: 1em; margin-right: 1em;"
+                  ><img
+                    border="0"
+                    height="335"
+                    src="http://4.bp.blogspot.com/-SXaV6gcLiZA/Va312ND8ewI/AAAAAAAABfM/ILLzPorQ3kw/s1600/image047.jpg"
+                    width="389"
+                /></a>
+              </td>
+            </tr>
+            <tr>
+              <td valign="top" width="200">
+                <a
+                  href="http://4.bp.blogspot.com/-SXaV6gcLiZA/Va312ND8ewI/AAAAAAAABfM/ILLzPorQ3kw/s1600/image047.jpg"
+                  style="clear: left; float: left; margin-bottom: 1em; margin-right: 1em;"
+                ></a
+                ><a
+                  href="http://4.bp.blogspot.com/-KhWYMG5HX3U/Va3116i55dI/AAAAAAAABfM/XMg6Ye7x9to/s1600/image046.jpg"
+                  ><img
+                    border="0"
+                    src="http://4.bp.blogspot.com/-KhWYMG5HX3U/Va3116i55dI/AAAAAAAABfM/XMg6Ye7x9to/s1600/image046.jpg"
+                    style="display: block; float: none; margin-left: auto; margin-right: auto;"
+                /></a>
+              </td>
+              <td valign="top" width="495">
+                <a
+                  href="http://2.bp.blogspot.com/-HKqgb_pdc88/Va312Q1xlDI/AAAAAAAABfM/lE1-qi-Mg40/s1600/image048.jpg"
+                  style="clear: right; float: right; margin-bottom: 1em; margin-left: 1em;"
+                  ><img
+                    align="left"
+                    border="0"
+                    height="235"
+                    src="http://2.bp.blogspot.com/-HKqgb_pdc88/Va312Q1xlDI/AAAAAAAABfM/lE1-qi-Mg40/s400/image048.jpg"
+                    style="display: inline; float: left;"
+                    width="476" /></a
+                ><a
+                  href="http://2.bp.blogspot.com/-HKqgb_pdc88/Va312Q1xlDI/AAAAAAAABfM/lE1-qi-Mg40/s1600/image048.jpg"
+                  style="clear: right; float: right; margin-bottom: 1em; margin-left: 1em;"
+                ></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <br />
+      </td>
+      <td style="padding: 0cm 5.4pt; width: 232.15pt;" valign="top" width="310">
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+      </td>
+    </tr>
+    <tr>
+      <td
+        colspan="2"
+        style="padding: 0cm 5.4pt; width: 487.3pt;"
+        valign="top"
+        width="650"
+      ></td>
+    </tr>
+  </tbody>
+</table>
+<div class="MsoCaption">
+  <span lang="">Map </span><span lang="">1</span
+  ><span lang="">
+    - People at risk for 25 years Return Period (WFP Countries – Dark Red = More
+    people at risk)</span
+  >
+</div>
+<table border="0" cellpadding="2" cellspacing="0" style="width: 400px;">
+  <tbody>
+    <tr>
+      <td valign="top" width="200">
+        <a
+          href="http://3.bp.blogspot.com/-hja6aLI-uYI/Va315FS4OaI/AAAAAAAABfM/-FdFbsl01MU/s1600/image051.png"
+          ><img
+            align="left"
+            border="0"
+            height="360"
+            src="http://3.bp.blogspot.com/-hja6aLI-uYI/Va315FS4OaI/AAAAAAAABfM/-FdFbsl01MU/s640/image051.png"
+            style="display: inline; float: left;"
+            width="640"
+        /></a>
+      </td>
+      <td valign="top" width="200">
+        <a
+          href="http://1.bp.blogspot.com/-W9gJOBTke7o/Va313aqVnkI/AAAAAAAABfM/A62KgQh45sI/s1600/image050.png"
+          ><img
+            border="0"
+            src="http://1.bp.blogspot.com/-W9gJOBTke7o/Va313aqVnkI/AAAAAAAABfM/A62KgQh45sI/s1600/image050.png"
+        /></a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<div class="MsoCaption">
+  <span lang=""></span><br />&nbsp;<span lang="">Map </span
+  ><span lang="">2</span
+  ><span lang="">
+    - EM-DAT flood occurrences geocoded (Dark Red = Higher number of
+    accidents)</span
+  ><span
+    style="height: 94px; margin-left: 812px; margin-top: 11px; position: absolute; width: 100px; z-index: 251700224;"
+  ></span>
+</div>
+<table border="0" cellpadding="2" cellspacing="0" style="width: 400px;">
+  <tbody>
+    <tr>
+      <td valign="top" width="200">
+        <a
+          href="http://1.bp.blogspot.com/-i1SVdS36wx4/Va317ne21EI/AAAAAAAABfM/N3dCLNIX-Gg/s1600/image055.png"
+          ><img
+            align="left"
+            border="0"
+            height="360"
+            src="http://1.bp.blogspot.com/-i1SVdS36wx4/Va317ne21EI/AAAAAAAABfM/N3dCLNIX-Gg/s640/image055.png"
+            style="display: inline; float: left;"
+            width="640"
+        /></a>
+      </td>
+      <td valign="top" width="200">
+        <a
+          href="http://3.bp.blogspot.com/-6rKwF1FCFOI/Va315mV7LyI/AAAAAAAABfM/Pt8Y1FkTXIU/s1600/image054.png"
+          ><img
+            border="0"
+            src="http://3.bp.blogspot.com/-6rKwF1FCFOI/Va315mV7LyI/AAAAAAAABfM/Pt8Y1FkTXIU/s1600/image054.png"
+        /></a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p>
+  <span
+    style="height: 85px; margin-left: 755px; margin-top: 17px; position: absolute; width: 145px; z-index: 251699200;"
+  ></span
+  ><span lang="">Map 3</span
+  ><span lang="">
+    – Mapping different rates of correlation between occurrences and
+    precipitation (Dark Blue = Correlation above 0.5)</span
+  >&nbsp;
+</p>
+<table border="0" cellpadding="2" cellspacing="0" style="width: 400px;">
+  <tbody>
+    <tr>
+      <td valign="top" width="200">
+        <a
+          href="http://2.bp.blogspot.com/-sGTWQ5B-LsM/Va319GkTFII/AAAAAAAABfM/PPYQomLjAdE/s1600/image058.png"
+          ><img
+            align="left"
+            border="0"
+            height="360"
+            src="http://2.bp.blogspot.com/-sGTWQ5B-LsM/Va319GkTFII/AAAAAAAABfM/PPYQomLjAdE/s640/image058.png"
+            style="display: inline; float: left;"
+            width="640"
+        /></a>
+      </td>
+      <td valign="top" width="200">
+        <a
+          href="http://4.bp.blogspot.com/-30ECOEOhDUc/Va317i7EQFI/AAAAAAAABfM/noBkswSyuZw/s1600/image057.png"
+          ><img
+            border="0"
+            src="http://4.bp.blogspot.com/-30ECOEOhDUc/Va317i7EQFI/AAAAAAAABfM/noBkswSyuZw/s1600/image057.png"
+        /></a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<div style="break-after: avoid; text-align: center;">&nbsp;</div>
+<div class="MsoCaption">&nbsp;</div>
+
+</div>
+{% endblock %}

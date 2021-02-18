@@ -11,8 +11,8 @@ class Config(object):
     CSRF_ENABLED = True
     SECRET_KEY = 'affattappelloso'
 
-    #SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:antarone@localhost/fabiolana')
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(app_dir,'instance', 'flablog.sqlite')
+    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:antarone@localhost/flablog'
+    # SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(app_dir,'instance', 'flablog.sqlite')
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 

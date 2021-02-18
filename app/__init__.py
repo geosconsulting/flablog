@@ -5,13 +5,22 @@ from flask_login import LoginManager
 from flask_bootstrap import Bootstrap
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
+from flask_fontawesome import FontAwesome
+from flask_marshmallow import Marshmallow
+from flask_restful import Api
+from flasgger import Swagger
+from flask_ckeditor import CKEditor
 
 from . import config
 
 db = SQLAlchemy()
 migrate = Migrate()
 bootstrap = Bootstrap()
-login_manager = LoginManager()
+login = LoginManager()
+ma = Marshmallow()
+api = Api()
+swagger = Swagger()
+ckeditor = CKEditor()
 
 
 def create_app():
@@ -24,27 +33,44 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app , db)
     bootstrap.init_app(app)
+    FontAwesome(app)
 
     # ADMIN Section
     admin = Admin(app , name='Fabio Lana Blog' , template_mode='bootstrap3')
     admin.add_view(ModelView(models.User , db.session))
     admin.add_view(ModelView(models.Post , db.session))
 
+
     # Main Content Section
-    from .main import routes
-    from app.main import main as main_blueprint
-    app.register_blueprint(main_blueprint)
+    from .main_dir import routes
+    from app.main_dir import main_bp
+    app.register_blueprint(main_bp)
 
     # Analytics Section
-    from .analytics import data_analytics_routing
-    from app.analytics import analytics as data_analytics
-    app.register_blueprint(data_analytics)
+    from .analytics_dir import analytics_routes
+    from app.analytics_dir import analytics_bp
+    app.register_blueprint(analytics_bp)
 
     #Authorization Section
-    # login_manager.init_app(app)
+    login.init_app(app)
 
-    from .auth import auth_routes
-    from app.auth import auth as user_management
-    app.register_blueprint(user_management)
+    from .auth_dir import auth_routes
+    from app.auth_dir import auth_bp
+    app.register_blueprint(auth_bp)
+
+    from .blog_dir import blog_routes
+    from app.blog_dir import blog_bp
+    app.register_blueprint(blog_bp)
+
+    ma.init_app(app)
+
+    from .api_dir import api_routes
+    from app.api_dir import api_bp
+    api.init_app(api_bp)
+    app.register_blueprint(api_bp)
+
+    swagger.init_app(app)
+
+    ckeditor.init_app(app)
 
     return app

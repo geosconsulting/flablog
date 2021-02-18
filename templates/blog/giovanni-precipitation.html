@@ -1,0 +1,176 @@
+{% extends "layout.html" %}
+
+{% block title %}Precipitation Analysis{% endblock %}
+
+{% block content %}
+
+    <h1 class="main-title">Precipitation Analysis Using <i>Giovanni</i></h1>
+    <div class="container">
+        <h2 class="sub-title">Time-series Decomposition of Precipitation Data Using R and NASA Giovanni</h2>
+        <div class="row">
+            <div class="col-sm-4">
+                <div id="map" style="height: 250px"></div>
+            </div>
+            <div class="col-sm-8">
+                <p class="text-justify">
+                    This tutorial will demonstrate how to import a time series data set stored in <code>.csv</code>
+                    format into <code>R</code>. It will explore data classes for columns in a <code>data.frame</code>
+                    and will walk through how to convert a date, stored as a character string, into a date class that
+                    <code>R</code> can recognize and plot efficiently.<br>
+                    The daily precipitation data are collected using Giovanni , a Web application developed by the GES DISC to provide a
+                    simple, intuitive way to visualize, analyze, and access vast amounts of Earth science remote sensing data, particularly
+                    from satellites. Giovanni includes data for aerosols, atmospheric chemistry, atmospheric temperature and moisture, and
+                    rainfall.&nbsp; Giovanni also includes output from assimilation models covering a wealth of atmospheric, land surface and
+                    oceanographic parameters. New products that superseed the TMPA datasets are now produced under the Global Precipitation
+                    Measurement (GPM) umbrella with the Integrated Multi-satellite Retrievals for GPM (IMERG) algorithm.
+                </p>
+            </div>
+        </div>
+        Giovanni offers a user friendly web-based environment to explore interactively various
+                remote sensing atmospheric data. With a few mouse clicks,the user can easily obtain remote
+            sensing or model information from around the globe, without the overhead of first having to download
+            the data and understand complicated data formats before initiating the intended analysis. Access is
+            provided through a common Web browser, so the user does not need special applications beyond what is
+            available on a typical personal computer.
+            <br>From a web page the user is able to select the
+            spatial area “box” for the desired region via a Java image map applet or manually enter the coordinates
+            defining the bounding box. The user also selects the temporal range for the data, one or more parameters
+            from this data set, and the desired output type (ASCII or one of several plot types).
+            For the plot selections, several color options are also available. The user is then able to refine
+            this analysis and download the results. ASCII output is useful for GIS or other user applications,
+             and the plots generated can be extracted into the user’s final report or paper. For more detailed
+            analysis, links to the data are available so the user can download the entire data set for further local
+            analysis. Depending on the choice of parameters, the majority of users will see the online
+            results in a matter of seconds while online manipulation of larger amounts of data (either spatially or temporally)
+            may take several minutes. Even in this more extreme case, the time from the inception of an
+            analysis ; idea to actually seeing the results is drastically reduced and the most tedious aspects of the
+            analysis areissues that the user bypasses in their entirety! </p>
+        <img title="image" alt="image" src="{{ url_for('static', filename='images/blog/giovanni-1.png') }}" >
+        <p>
+        The purpose of the 3B42 algorithm is to produce TRMM-adjusted merged-infrared (IR) precipitation and
+        root-mean-square (RMS) precipitation-error estimates. The algorithm consists of two separate steps.
+        The first step uses the TRMM VIRS and TMI orbit
+        data (TRMM products 1B01 and 2A12) and the monthly TMI/TRMM Combined Instrument (TCI) calibration parameters
+        (from TRMM product 3B31) to produce monthly IR calibration parameters. The second step uses these derived monthly IR
+        calibration parameters to adjust the merged-IR precipitation data, which consists of GMS, GOES-E, GOES-W, Meteosat-7,
+        Meteosat-5, and NOAA-12 data. </p>
+        <p>The final gridded, adjusted merged-IR precipitation (mm/hr)
+        and RMS precipitation-error estimates have a daily temporal resolution and a 0.25-degree by 0.25-degree spatial resolution.
+        Spatial coverage extends from 50 degrees south to 50 degrees north latitude. </p>
+        <h4>Key Strengths: </h4>
+        <ul>
+            <li>
+                Uniquely offers high spatial and temporal resolution precipitation estimates over a relatively long period of record (since 1998)
+            <li>Useful for investigating the climatological distribution of rainfall, and its frequency and intensity  <li>
+            Useful for validation of tropical precipitation in climate models, provided that care is taken to put the data on comparable
+            grids using conservative re-gridding and to use accumulated (rather than instantaneous) precipitation </li>
+        </ul>
+        <h4> Key Limitations: </h4>
+        <ul> <li>Complex algorithms are required to translate indirect and infrequent satellite measurements into
+        high-resolution gridded precipitation estimates at regular time intervals  <li>TRMM precipitation radar algorithm likely
+        underestimates precipitation in (a) regions of intense convection over land and (b) higher latitudes  <li>As a Climate Data
+        Record with global coverage, GPCP should be preferred over TRMM for large-scale climate variability studies </li>
+        </ul>
+        <p>
+            Due to the fact that TMPA timeseries are built up with estimates from&nbsp; constantly varying data sources, it is likely
+        that inhomegeneities in the temporal record exist.&nbsp; Each precipitation field should be interpreted as the best estimate of
+        precipitation in each grid point at the observation time.&nbsp; In general, as a high-resolution precipitation product,
+        TMPA does not have the same homogeneity goals as a climate dataset like GPCP v2.2.&nbsp; </p>
+        <p>Data can be saved in several different format including graphic formats&nbsp; and timeseries (e.g. comma delimited format).
+            <img title="image" alt="image" src="{{ url_for('static', filename='images/blog/giovanni-2-1.jpg') }}" ><p>
+            <img title="image" alt="image" src="{{ url_for('static', filename='images/blog/giovanni-2-2.png') }}" ><p>
+            This example of the new Version 7 TMPA-RT data product shows a rainfall accumulation map in the Rome region between 2000
+            and 2016 generated with Giovanni.</p>
+        <p>
+        
+        The data that we will use is in <code>.csv</code> (comma-separated values) file format. 
+        The <code>.csv</code> format is a plain text format, where each value in the dataset is separate by a comma and each 
+        “row” in the dataset is separated by a line break. Plain text formats are ideal for working both across platforms 
+        (Mac, PC, LINUX, etc) and also can be read by many different tools. The plain text format is also less likely to become 
+        obsolete over time.</p>
+        <p>To begin, let’s import the data into <code>R</code>. We can use base <code>R</code>
+        functionality to import a <code>.csv</code> file.
+
+        <p>Once our working directory is set, we can import the file using <code>read.csv()</code>
+        
+        When reading in files we most often use stringsAsFactors = FALSE. This setting ensures that non-numeric data (strings) are 
+        not converted to factors.A factor is similar to a category. However factors can be numerically interpreted (they can have 
+        an order) and may have a level associated with them.Examples of factors: </p>
+        <ul>
+            <li>Month Names (an ordinal variable):
+        Month names are non-numerical but we know that April (month 4) comes after March (month 3) and each could be
+                represented  by a number (4 &amp; 3).</li>
+            <li>1 and 2s to represent male and female sex (a nominal variable): Numerical interpretation of
+        non-numerical data but no order to the levels.
+        </li>
+        </ul>
+
+        <img title="image" alt="image" src="{{ url_for('static', filename='images/blog/giovanni-3.png') }}" ><p>
+
+        <img title="image" alt="image" src="{{ url_for('static', filename='images/blog/giovanni-4.png') }}" ><p>
+
+        <p>The Seasonal Trend Decomposition using Loess (STL) is an algorithm that was developed to help to divide up a time
+        series into three components namely: the trend, seasonality and remainder. The methodology was presented by Robert
+        Cleveland, William Cleveland, Jean McRae and Irma Terpenning in the Journal of Official Statistics in 1990.
+        The STL is available within R via the <strong>stl</strong> function.
+
+        <img title="image" alt="image" src="{{ url_for('static', filename='images/blog/giovanni-5.png') }}" ><p>
+        <p>The four graphs are the original data, seasonal component, trend component and the remainder and this shows the periodic
+    seasonal pattern extracted out from the original data. There is a bar at the right hand side of each graph to allow a
+    relative comparison of the magnitudes of each component. For this data the change in trend is less than the variation
+    doing to the monthly variation.</p>
+        <img title="image" alt="image" src="{{ url_for('static', filename='images/blog/giovanni-6.png') }}" >
+<p>The trend component shows a marked insufficiency of precipitation in 2006, confirmed also by the two lines below zero
+    in the remainder component. this is confirmed by the historical report of the Roman authorities:
+</p>
+
+<p>
+    The year 2006 was characterized by a general lack of liquidity and snowfall and temperatures significantly above the
+    average of the entire national territory. Such lack of precipitation has also been reflected in Lazio, causing abnormal
+    weather-hydrological situations, in particular with reference to the period September - December 2006.<br>
+    The smallness of the snow cover at the end of this year on the Apennines, and the data available from the monitoring of
+    the most sensitive sources to annual variations in precipitation, in the case of persistence of water supply deficit,
+    inducing to expect for the coming months outflows reduced , with possible critical as regards both the irrigation
+    requirement that it caters for the surface water resource, both for the respect of the conditions of outflow<br>minimum
+    subsistence of the waterways.<br>There were no critical situations regarding the drinking water supply.
+</p>
+ <img title="image" alt="image" src="{{ url_for('static', filename='images/blog/giovanni-7.png') }}" ><p>
+
+  <p>After over 17 years of productive data gathering, the instruments on TRMM were turned off on April 8,
+    2015. The spacecraft re-entered the Earth’s atmosphere on June 15, 2015, at 11:55 p.m. EDT, over the South Indian Ocean,
+    The multi-satellite 3B42*/TMPA product will continue to be produced through early 2018 when the transition from 3B42*
+    to IMERG will be complete.
+  </p>
+    </div>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css"
+           integrity="sha512-1xoFisiGdy9nvho8EgXuXvnpR5GAMSjFwp40gSRE3NwdUdIMIKuPa7bqoUhLD0O/5tPNhteAsE5XyyMi5reQVA=="
+           crossorigin="anonymous" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"
+             integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+             crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-providers/1.11.0/leaflet-providers.min.js"
+            integrity="sha512-TO+Wd5hbpDsACTmvzSqAZL83jMQCXGRFNoS4WZxcxrlJBTdgMYaT7g5uX49C5+Kbuxzlg2A+TFJ6UqdsXuOKLw=="
+            crossorigin="anonymous"></script>
+
+ <script type="text/javascript">
+
+  var map = L.map('map').setView({{ coords }}, {{ zoom }});
+
+   var Stadia_OSMBright = L.tileLayer('https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png', {
+	maxZoom: 20,
+	attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+    });
+
+  // Now add the layer onto the map
+  map.addLayer(Stadia_OSMBright);
+
+  // It even opens up a popup when you click it!
+  marker = L.marker({{ coords }});
+  marker.addTo(map)
+  marker.bindPopup("<strong>Cyclone Idai</strong>");
+    </script>
+
+{% endblock %}
