@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block title %}Unauthorized{% endblock %}
+
+{% block content %}
+    <h1 class="main-title">Be careful not to choke on your aspirations</h1>
+        <h2 class="sub-title">Error 401</h2>
+        <div class="row">
+            <img class="img-circle center-block" src="{{ url_for('static', filename='images/dartie.jpg') }}">
+        </div>
+{% endblock %}

@@ -5,8 +5,14 @@ from werkzeug.urls import url_parse
 from .forms import LoginForm, RegistrationForm
 
 from . import auth_bp
-from app.models import User, Post
-from app import db
+from app.models import User
+from app import db, login
+
+
+@login.user_loader
+def load_user(id):
+    return db.session.query(User).get(int(id))
+
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -37,7 +43,7 @@ def register():
     form = RegistrationForm()
 
     if form.validate_on_submit():
-        user = User(username=form.username.data,email=form.email.data)
+        user = User(username=form.username.data, email=form.email.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -46,10 +52,12 @@ def register():
 
     return render_template('auth/register.html', title='Register', form=form)
 
+
 @auth_bp.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('main_dir.index'))
+
 
 @auth_bp.route('/user/<username>')
 def user(username):
@@ -59,3 +67,4 @@ def user(username):
         {'author': user, 'body': 'Test post #2'}
     ]
     return render_template('user.html', user=user, posts=posts)
+

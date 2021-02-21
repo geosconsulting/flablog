@@ -1,6 +1,4 @@
 from flask import render_template, Response, request, flash
-from sqlalchemy import create_engine
-import pandas as pd
 import requests
 from flask_login import login_required
 
@@ -8,7 +6,6 @@ from . import analytics_bp
 from . import famews_data
 from .forms import FetchRecordsForm
 
-from app import ma
 
 @analytics_bp.route('/faw_situation')
 def faw_situation():
