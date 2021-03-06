@@ -55,8 +55,7 @@ div {
 
 .main-title {
     font-size:52px;
-    font-family: Elephant;
-    /*font-family: "Lora", Georgia, "Times New Roman", Times, serif;*/
+    font-family: "Arial Black";
     text-align: center;
     color: black;
 }
@@ -81,10 +80,11 @@ div {
 
 .card-title{
     font-size: 16px;
+    font-weight: bold;
 }
 
 .navbar-default {
-    background-color: #f8f8f8;
+    /*background-color: #f8f8f8;*/
     border-color: #e7e7e7;
     font-size: large;
     padding: 19px 20px !important;
@@ -125,4 +125,8 @@ background-color: white;
 padding: 20px;
 }
 
+p {
+  font-size: 16px;
+  /*color: #666666;*/
+}
 

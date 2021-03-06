@@ -4,14 +4,17 @@
 {% block title %} {{ title }} {% endblock %}
 
 {% block content %}
-
     <div class="row">
         <div class="col-md-4 col-md-offset-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <strong class="">Profile</strong>
+            <div class="panel-group">
+                <div class="panel panel-default">
+                    <div class="panel-heading">My Profile</div>
                 </div>
-
+                <div class="panel panel-default">
+                    <div class="panel-body">Username: {{ user.username  }}</div>
+                    <div class="panel-body">Email: {{ user.email}}</div>
+                    <div class="panel-body">Active: {{ user.active}}</div>
+                </div>
             </div>
         </div>
     </div>

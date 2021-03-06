@@ -4,45 +4,6 @@
  * Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-clean-blog/blob/master/LICENSE)
  */
 
-body {
-  font-size: 14px;
-  /*color: #212529;*/
-  /*font-family: SansSerif;*/
-}
-
-/*p {*/
-/*  line-height: 1.5;*/
-/*  margin: 30px 0;*/
-/*}*/
-
-/*p a {*/
-/*  text-decoration: underline;*/
-/*}*/
-
-/*h1,*/
-/*h2,*/
-/*h3,*/
-/*h4,*/
-h5,
-h6 {
-  font-weight: 800;
-  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
-
-/*a {*/
-/*  color: #212529;*/
-/*  transition: all 0.2s;*/
-/*}*/
-
-/*a:focus, a:hover {*/
-/*  color: #0085A1;*/
-/*}*/
-
-/*blockquote {*/
-/*  font-style: italic;*/
-/*  color: #868e96;*/
-/*}*/
-
 .section-heading {
   font-size: 36px;
   font-weight: 700;
@@ -292,25 +253,14 @@ form .form-group:first-child .floating-label-form-group {
   border-top: 1px solid #dee2e6;
 }
 
-footer {
-  padding: 50px 0 65px;
-}
-
-footer .list-inline {
-  margin: 0;
-  padding: 0;
-}
-
-footer .copyright {
-  font-size: 14px;
-  margin-bottom: 0;
-  text-align: center;
-}
 
 .post-title {
-  /*font-family: "Arial Black" ;*/
-  font-family: Elephant;
-  /*font-size: larger;*/
-  /*font-family: "Lora", Georgia, "Times New Roman", Times, serif;*/
-  /*color: #1f77b4;*/
+  font-family: "Gill Sans Ultra Bold";
+  font-weight: bold;
+  font-size: larger;
+}
+
+.post-subtitle {
+  font-size: 18px;
+  color: rgba(63,63,63,0.87);
 }

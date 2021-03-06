@@ -1,6 +1,10 @@
 import wbdata
 import datetime
 
+from hdx.utilities.easy_logging import setup_logging
+from hdx.hdx_configuration import Configuration
+from hdx.data.dataset import Dataset
+
 print(wbdata.get_source())
 
 print(wbdata.get_indicator(source=1))
@@ -29,9 +33,6 @@ df1 = wbdata.get_dataframe(indicators, country=countries, convert_date=True)
 
 print(df1.sort_index().groupby('country').last().corr())
 
-from hdx.utilities.easy_logging import setup_logging
-from hdx.hdx_configuration import Configuration
-from hdx.data.dataset import Dataset
 
 setup_logging()
 Configuration.create(hdx_site='prod', user_agent='A_Quick_Example', hdx_read_only=True)

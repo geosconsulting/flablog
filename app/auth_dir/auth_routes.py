@@ -1,4 +1,4 @@
-from flask import render_template,request, current_app, redirect, url_for, flash
+from flask import render_template, request, current_app, redirect, url_for, flash
 from flask_login import login_user, logout_user, current_user
 from werkzeug.urls import url_parse
 
@@ -6,12 +6,7 @@ from .forms import LoginForm, RegistrationForm
 
 from . import auth_bp
 from app.models import User
-from app import db, login
-
-
-@login.user_loader
-def load_user(id):
-    return db.session.query(User).get(int(id))
+from app import db
 
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
@@ -63,8 +58,8 @@ def logout():
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     posts = [
-        {'author': user, 'body': 'Test post #1'},
-        {'author': user, 'body': 'Test post #2'}
+        {'author': user, 'body': 'Test post #1'}
     ]
-    return render_template('user.html', user=user, posts=posts)
+
+    return render_template('auth/profile.html', user=user, posts=posts)
 

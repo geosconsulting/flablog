@@ -1,19 +1,17 @@
-from flask import request,url_for, flash, redirect
+from flask import request, url_for, redirect
 from datetime import datetime
-from flask_login import UserMixin, current_user
-from flask_security import RoleMixin
+from flask_login import current_user , UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from flask_admin.contrib.sqla import ModelView
 from flask_admin import expose, AdminIndexView
 
-from app import db
-from app import ma
-from app import admin
-
 from sqlalchemy import create_engine
 import geoalchemy2
 from sqlalchemy.ext.declarative import declarative_base
+
+
+from app import db, login, ma, admin
 
 
 class User(db.Model, UserMixin):
@@ -21,7 +19,12 @@ class User(db.Model, UserMixin):
     active = db.Column('is_active' , db.Boolean() , nullable=False , server_default='1')
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
+    email_confirmed_at = db.Column(db.DateTime())
     password = db.Column(db.String(128))
+
+    # User information
+    first_name = db.Column(db.String(100), nullable=False , server_default='')
+    last_name = db.Column(db.String(100),  nullable=False , server_default='')
 
     roles = db.relationship('Role' , secondary='user_roles')
 
@@ -35,7 +38,12 @@ class User(db.Model, UserMixin):
         return check_password_hash(self.password , password)
 
 
-class Role(db.Model, RoleMixin):
+@login.user_loader
+def load_user(id_load):
+    return db.session.query(User).get(int(id_load))
+
+
+class Role(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(80), unique=True)
     description = db.Column(db.String(255))
@@ -43,12 +51,13 @@ class Role(db.Model, RoleMixin):
     def __str__(self):
         return self.name
 
+
 # Define the UserRoles association table
-    class UserRoles(db.Model):
-        __tablename__ = 'user_roles'
-        id = db.Column(db.Integer(), primary_key=True)
-        user_id = db.Column(db.Integer(), db.ForeignKey('user.id', ondelete='CASCADE'))
-        role_id = db.Column(db.Integer(), db.ForeignKey('role.id', ondelete='CASCADE'))
+class UserRoles(db.Model):
+    __tablename__ = 'user_roles'
+    id = db.Column(db.Integer(), primary_key=True)
+    user_id = db.Column(db.Integer(), db.ForeignKey('user.id', ondelete='CASCADE'))
+    role_id = db.Column(db.Integer(), db.ForeignKey('role.id', ondelete='CASCADE'))
 
 
 class Post(db.Model):
@@ -71,7 +80,7 @@ class UserSchema(ma.Schema):
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
 
-sparc_engine = create_engine('postgresql://fabiolana:antarone@localhost:5432/sparc')
+sparc_engine = create_engine('postgresql://postgres@localhost:5432/sparc')
 Base = declarative_base()
 Base.metadata.reflect(sparc_engine)
 
@@ -82,7 +91,7 @@ class Flood(Base):
 
 class FloodSchema(ma.Schema):
     class Meta:
-        fields = ("id","iso3", "adm0_name", "rp25", "rp50","rp100","rp200","rp500","rp1000")
+        fields = ("id", "iso3", "adm0_name", "rp25", "rp50", "rp100", "rp200", "rp500", "rp1000")
         model = Flood
 
 
@@ -96,7 +105,7 @@ class EmdatFlood(Base):
 
 class FloodEmdatSchema(ma.Schema):
     class Meta:
-        fields = ("id","country", "location", "type", "killed", "total_affected")
+        fields = ("id", "country", "location", "type", "killed", "total_affected")
         model = EmdatFlood
 
 
@@ -116,7 +125,7 @@ class UserModelView(ModelView):
 
     def inaccessible_callback(self, name, **kwargs):
         # redirect to login page if user doesn't have access
-        return redirect(url_for('login', next=request.url))
+        return redirect(url_for('auth_dir.login', next=request.url))
 
 
 class PostRoleModelView(ModelView):
@@ -130,7 +139,21 @@ class PostRoleModelView(ModelView):
 
     def inaccessible_callback(self, name, **kwargs):
         # redirect to login page if user doesn't have access
-        return redirect(url_for('login', next=request.url))
+        return redirect(url_for('auth_dir.login', next=request.url))
+
+
+class UserRoleModelView(ModelView):
+
+    can_create = True
+    can_edit = True
+    can_delete = True
+
+    def is_accessible(self):
+        return current_user.is_authenticated
+
+    def inaccessible_callback(self, name, **kwargs):
+        # redirect to login page if user doesn't have access
+        return redirect(url_for('auth_dir.login', next=request.url))
 
 
 class FLABlogAdminIndexView(AdminIndexView):
@@ -145,3 +168,5 @@ class FLABlogAdminIndexView(AdminIndexView):
 admin.add_view(UserModelView(User , db.session))
 admin.add_view(PostRoleModelView(Role , db.session))
 admin.add_view(PostRoleModelView(Post , db.session))
+admin.add_view(UserRoleModelView(UserRoles , db.session))
+

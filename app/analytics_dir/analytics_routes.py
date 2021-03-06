@@ -1,4 +1,4 @@
-from flask import render_template, Response, request, flash
+from flask import render_template, Response, request
 import requests
 from flask_login import login_required
 
@@ -34,12 +34,14 @@ def write_famews_data():
 
     return render_template('analytics/get_api_records.html' , title='Get Data from API' , form=form)
 
+
 @analytics_bp.route('/get_famews_data/<string:country>')
 def get_famews_data(country):
     df_merged = famews_data.get_data(country)
     df_json = df_merged.to_json(orient='records')
     response = Response(response=df_json , status=200 , mimetype="application/json")
-    return (response)
+    return response
+
 
 @analytics_bp.route('/famews_chart')
 def famews_chart():

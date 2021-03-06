@@ -22,9 +22,9 @@
     <script type="text/javascript" src=" {{ url_for('static', filename='js/libraries/colorbrewer.js') }}"></script>
     <script type="text/javascript" src=" {{ url_for('static', filename='js/custom/main.js') }}"></script>
     <nav class="navbar navbar-default">
-        <div class="container">
+{#        <div class="container">#}
             <div class="navbar-header">
-                <a class="navbar-brand" href="/">Fabio Lana</a>
+                <a class="navbar-brand" href="{{ url_for('main_dir.about') }}">Fabio Lana</a>
 {#                    <a class="navbar-brand" href="#">#}
 {#                        <img src="{{ url_for('static', filename='images/logo_crop.png') }}" width="50%" />#}
 {#                    </a>#}
@@ -37,16 +37,6 @@
                         <li><a href="{{ url_for('main_dir.geospatial') }}">Geospatial Analysis</a></li>
                         <li><a href="{{ url_for('main_dir.data_analysis') }}">Data Analysis</a></li>
                         <li><a href="{{ url_for('main_dir.remote_sensing') }}">Remote Sensing</a></li>
-{#                        <li><div class="dropdown-divider"></div></li>#}
-{#                        <li class="dropdown-submenu">#}
-{#                            <a tabindex="-1" class="dropdown-submenu-toggle">Other Studies</a>#}
-{#                                <ul class="dropdown-menu">#}
-{#                                    <li><a class="dropdown-item" href="{{ url_for('blog_dir.idai') }}">Cyclone Idai</a></li>#}
-{#                                    <li><a class="dropdown-item" href="{{ url_for('blog_dir.castelfusano') }}">Wildfire Castelfusano</a></li>#}
-{#                                    <li><a class="dropdown-item" href="{{ url_for('blog_dir.giovanni') }}">Precipitation Using NASA Giovanni</a></li>#}
-{#                                </ul>#}
-{#                            </li>#}
-{#                        </li>#}
                     </ul>
             </li>
             <li class="dropdown">
@@ -56,58 +46,50 @@
                         <li class="dropdown-submenu">
                             <a tabindex="-1" class="dropdown-submenu-toggle">FAMEWS</a>
                                 <ul class="dropdown-menu">
-			                        <li><a class="dropdown-item" href="{{ url_for('analytics_dir.famews_chart',country='BJ')}}">Benin</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('analytics_dir.famews_chart',country='CV')}}">Cape Verde</a></li>
+			                        <li><a class="dropdown-item" href="{{ url_for('analytics_dir.famews_chart',country='CV')}}">Cape Verde</a></li>
                                     <li><a class="dropdown-item" href="{{ url_for('analytics_dir.famews_chart',country='KE')}}">Kenya</a></li>
                                     <li><a class="dropdown-item" href="{{ url_for('analytics_dir.famews_chart',country='GH')}}">Ghana</a></li>
                                     <li><a class="dropdown-item" href="{{ url_for('analytics_dir.famews_chart',country='MW')}}">Malawi</a></li>
                                     <li><a class="dropdown-item" href="{{ url_for('analytics_dir.famews_chart',country='MZ')}}">Mozambique</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('analytics_dir.famews_chart',country='RW')}}">Rwanda</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('analytics_dir.famews_chart',country='SN')}}">Senegal</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('analytics_dir.famews_chart',country='TG')}}">Togo</a></li>
                                     <li><a class="dropdown-item" href="{{ url_for('analytics_dir.famews_chart',country='TZ')}}">Tanzania</a></li>
                                 </ul>
                         </li>
                         <li><a href="{{ url_for('flasgger.apidocs') }}" target="_blank">API</a></li>
                     </ul>
             </li>
-            <li><a href="/about">About</a></li>
         </ul>
             {{ fontawesome_css() }}
             {{ fontawesome_js() }}
             <ul class="nav navbar-nav navbar-right">
-{#            <form class="navbar-form navbar-left" role="search">#}
-{#                <div class="form-group">#}
-{#                    <input type="text" class="form-control" placeholder="Search">#}
-{#                </div>#}
-{#                <button type="submit" class="btn btn-default">Submit</button>#}
-{#            </form>#}
             {% if current_user.is_authenticated %}
                 <li class="dropdown">
                 <a class="dropdown-toggle fas fa-screwdriver" data-toggle="dropdown">Admin Tasks<span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="{{ url_for('analytics_dir.write_famews_data') }}">FAMEWS data</a></li>
+                    <li><a href="{{ url_for('auth_dir.user', username = current_user.username) }}">My Page</a></li>
+                    <li><a href="{{ url_for('admin.index') }}">Admin Page</a></li>
                     <li><a href="{{ url_for('blog_dir.edit_blog') }}">Edit Blog</a></li>
-                    <li><a href="{{ url_for('admin.index') }}">Blog Admin Page</a></li>
-{#                    <li><a href="{{ url_for('api.floodlistresource') }}">SPARC Floods API</a></li>#}
-{#                    <li><a href="{{ url_for('api.userlistresource') }}" >Users API</a></li>#}
+                    <li><a href="{{ url_for('analytics_dir.write_famews_data') }}">FAMEWS data</a></li>
                     </ul>
                 </li>
-                <p class="navbar-text text-uppercase">Logged In as {{ current_user.username }}</p>
                 <li><a href="{{ url_for('auth_dir.logout') }}"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
-                <li class="hidden"><a href="{{ url_for('auth_dir.register') }}"><span class="glyphicon glyphicon-user"></span> Register</a></li>
-                <li class="hidden"><a href="{{ url_for('auth_dir.login') }} "><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
             {% else %}
                 <li><a href="{{ url_for('auth_dir.register') }}"><span class="glyphicon glyphicon-user"></span> Register</a></li>
                 <li><a href="{{ url_for('auth_dir.login') }} "><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
             {% endif %}
+            <form class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search">
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
+            </form>
         </ul>
-        </div>
+{#        </div>#}
     </nav>
 {% endblock %}
 <body>
 
 {% block content %}
+
 {% endblock %}
 
 </body>

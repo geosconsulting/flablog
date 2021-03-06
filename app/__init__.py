@@ -10,6 +10,10 @@ from flask_restful import Api
 from flasgger import Swagger
 from flask_ckeditor import CKEditor
 from flask_mail import Mail
+from flask_babelex import Babel
+from flask_wtf.csrf import CSRFProtect
+
+
 import logging
 from logging.handlers import SMTPHandler
 from logging.handlers import RotatingFileHandler
@@ -27,8 +31,8 @@ swagger = Swagger()
 ckeditor = CKEditor()
 mail = Mail()
 admin = Admin()
-
-from flask_admin import expose, AdminIndexView
+babel = Babel()
+csrf_protect = CSRFProtect()
 
 
 def create_app():
@@ -46,7 +50,7 @@ def create_app():
             mail_handler = SMTPHandler(
                     mailhost=(app.config['MAIL_SERVER'] , app.config['MAIL_PORT']) ,
                     fromaddr='no-reply@' + app.config['MAIL_SERVER'] ,
-                    toaddrs=app.config['ADMINS'] ,
+                    toaddrs=app.config['MAIL_DEFAULT_SENDER'] ,
                     subject='Fabio Lana Blog Failure' ,
                     credentials=auth , secure=secure)
             mail_handler.setLevel(logging.ERROR)
@@ -54,7 +58,7 @@ def create_app():
 
         if not os.path.exists('logs'):
             os.mkdir('logs')
-        file_handler = RotatingFileHandler('logs/microblog.log' , maxBytes=10240 ,
+        file_handler = RotatingFileHandler('logs/flablog.log' , maxBytes=10240 ,
                                            backupCount=10)
         file_handler.setFormatter(logging.Formatter(
                 '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
@@ -64,13 +68,12 @@ def create_app():
         app.logger.setLevel(logging.INFO)
         app.logger.info('Fabio Lana Blog startup')
 
-    # DB Section
-    from app import models
-
     db.init_app(app)
     migrate.init_app(app , db)
     bootstrap.init_app(app)
     FontAwesome(app)
+
+    from app import models
 
     # ADMIN Section
     admin.init_app(app)
@@ -108,9 +111,9 @@ def create_app():
     app.register_blueprint(api_bp)
 
     swagger.init_app(app)
-
     ckeditor.init_app(app)
-
     mail.init_app(app)
+    babel.init_app(app)
+    csrf_protect.init_app(app)
 
     return app

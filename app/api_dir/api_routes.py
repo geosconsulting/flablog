@@ -6,19 +6,22 @@ from app.models import sparc_engine
 
 from app.models import User, users_schema, user_schema
 from app.models import Flood, floods_schema, flood_schema
-from app.models import EmdatFlood,floods_emdat_schema
+from app.models import EmdatFlood, floods_emdat_schema
 
 db_session = scoped_session(sessionmaker(bind=sparc_engine))
+
 
 class UserListResource(Resource):
     def get(self):
         users = User.query.all()
         return users_schema.dump(users)
 
+
 api.add_resource(UserListResource, '/users')
 
+
 class UserSingleResource(Resource):
-    def get(self,id):
+    def get(self, id):
         """
                Return FlaskRESTful Resource
                It works also with swag_from, schemas and spec_dict
@@ -42,19 +45,33 @@ class UserSingleResource(Resource):
         user = User.query.get_or_404(id)
         return user_schema.dump(user)
 
+
 api.add_resource(UserSingleResource, '/user/<id>')
+
 
 class FloodListResource(Resource):
     def get(self):
+        """
+                            SPARC - People at risk of Flood
+                            It works also with swag_from, schemas and spec_dict
+                            ---
+                            responses:
+                                200:
+                                    description: People At Risk of Flooding
+                                    schema:
+                        """
+
         floods = db_session.query(Flood).all()
         return floods_schema.dump(floods)
 
+
 api.add_resource(FloodListResource, '/floods_sparc')
 
+
 class FloodListCountryResource(Resource):
-    def get(self,iso):
+    def get(self, iso):
         """
-                    SPARC - People by Flood
+                    SPARC - People at risk of flood by Country
                     It works also with swag_from, schemas and spec_dict
                     ---
                     parameters:
@@ -76,17 +93,21 @@ class FloodListCountryResource(Resource):
         floods_country = db_session.query(Flood).filter(Flood.iso3 == iso).all()
         return floods_schema.dump(floods_country)
 
+
 api.add_resource(FloodListCountryResource, '/floods_sparc/<string:iso>')
+
 
 class FloodsEmdatResource(Resource):
     def get(self):
         floods_emdat = db_session.query(EmdatFlood).all()
         return floods_emdat_schema.dump(floods_emdat)
 
+
 api.add_resource(FloodsEmdatResource, '/floods_emdat')
 
+
 class FloodsEmdatCountryResource(Resource):
-    def get(self,country):
+    def get(self, country):
         """
                             EMDAT - Historical Floods
                             ---
@@ -108,6 +129,7 @@ class FloodsEmdatCountryResource(Resource):
                         """
         floods_country = db_session.query(EmdatFlood).filter(EmdatFlood.country == country).all()
         return floods_emdat_schema.dump(floods_country)
+
 
 api.add_resource(FloodsEmdatCountryResource, '/floods_emdat/<string:country>')
 

@@ -19,6 +19,8 @@ d3.json("/api/floods_sparc", function(error,data){
             d.rp1000 = +d.rp1000;
         });
 
+        console.log(data);
+
         var facts = crossfilter(data);
 
         //Dimension

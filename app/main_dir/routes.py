@@ -1,12 +1,10 @@
-from flask import render_template, send_file
-
-import base64
-from io import BytesIO, StringIO
-from matplotlib.figure import Figure
+from flask import render_template
 from flask_mail import Message
-
+# from flask_login import login_required
+# from flask_user import roles_required
 
 from . import main_bp
+import app
 from app import mail
 
 
@@ -17,6 +15,7 @@ def index():
 
 
 @main_bp.route('/sendem')
+# @login_required
 def sendem():
     msg = Message("Hello" ,
                   sender="fabio_100264@yahoo.it" ,
